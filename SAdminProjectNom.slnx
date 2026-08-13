@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="sadminprojectnom.client/sadminprojectnom.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="SAdminProjectNom.Server/SAdminProjectNom.Server.csproj" />
+</Solution>
