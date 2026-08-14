@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <SpaRoot>..\sadminprojectnom.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:53626</SpaProxyServerUrl>
+    <SpaProxyServerUrl>http://localhost:3000</SpaProxyServerUrl>
     <UserSecretsId>0416224a-0ac1-4ab3-ae80-9029fd01f1a9</UserSecretsId>
   </PropertyGroup>
 

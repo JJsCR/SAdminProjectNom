@@ -3,9 +3,9 @@
   "description": "Angular-Material-Admin-Full",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config src/proxy.conf.js",
     "start:nobackend": "ng serve",
-    "start:backend": "ng serve --configuration backend",
+    "start:backend": "ng serve --configuration backend --proxy-config src/proxy.conf.js",
     "build": "ng build --configuration production",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",

@@ -7,9 +7,4 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\sadminprojectnom.client\browser\</BuildOutputFolder>
   </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Downloads\WhatsApp Image 2026-08-12 at 5.27.11 PM.jpeg">
-      <Link>src\assets\auth\WhatsApp Image 2026-08-12 at 5.27.11 PM.jpeg</Link>
-    </None>
-  </ItemGroup>
 </Project>
