@@ -47,6 +47,12 @@ const TREE_DATA: SidebarNode[] = [
       { name: 'User Add', route: routes.Users_CREATE, active: 'active' },
       { name: 'User Edit', route: routes.Users_EDIT, active: 'active' },
     ]
+  },
+  {
+    name: 'Productos',
+    children: [
+      { name: 'Productos', route: routes.PRODUCTS_PAGE, active: 'active' },
+    ]
   }
 ];
 

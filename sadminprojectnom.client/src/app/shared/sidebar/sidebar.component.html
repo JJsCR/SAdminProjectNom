@@ -55,6 +55,19 @@
           </mat-icon>
         </div>
       }
+
+      @if (node.name === 'Productos') {
+        <div class="mat-tree-item" matTreeNodeToggle>
+          <div>
+            <mat-icon>inventory_2</mat-icon>
+            <p>{{node.name}}</p>
+          </div>
+          <mat-icon
+            [ngClass]="{rotateUp: treeControl.isExpanded(node), rotateDown: !treeControl.isExpanded(node)}"
+            >keyboard_arrow_down
+          </mat-icon>
+        </div>
+      }
     </mat-tree-node>
 
   </mat-tree>

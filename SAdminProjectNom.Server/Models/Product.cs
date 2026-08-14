@@ -19,8 +19,7 @@ namespace SAdminProjectNom.Server.Models
         [Column("Precio")]
         public decimal Price { get; set; }
 
-        [Column("Foto")]
-        [MaxLength(500)]
+        [Column("Foto", TypeName = "nvarchar(max)")]
         public string? Foto { get; set; }
 
         [Column("Activo")]
