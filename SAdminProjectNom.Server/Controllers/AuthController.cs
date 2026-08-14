@@ -50,6 +50,37 @@ namespace SAdminProjectNom.Server.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
+            // Obtener información de tablas de BD para verificar conexión
+            var dbInfo = new
+            {
+                database = "DbAdminProjectNom",
+                connected = true,
+                tables = new List<string>()
+            };
+
+            try
+            {
+                var tableNames = _db.Model.GetEntityTypes()
+                    .Select(t => t.GetAnnotation("Relational:TableName")?.Value?.ToString() ?? t.ClrType.Name)
+                    .ToList();
+
+                dbInfo = new
+                {
+                    database = "DbAdminProjectNom",
+                    connected = true,
+                    tables = tableNames
+                };
+            }
+            catch (Exception ex)
+            {
+                dbInfo = new
+                {
+                    database = "DbAdminProjectNom",
+                    connected = false,
+                    tables = new List<string> { $"ERROR: {ex.Message}" }
+                };
+            }
+
             var jwtSection = _config.GetSection("Jwt");
             var key = jwtSection.GetValue<string>("Key") ?? "change_this_secret_for_prod";
             var issuer = jwtSection.GetValue<string>("Issuer") ?? "SAdminProjectNom";
@@ -75,7 +106,12 @@ namespace SAdminProjectNom.Server.Controllers
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return Content(tokenString);
+            // Retornar token y información de BD
+            return Ok(new
+            {
+                token = tokenString,
+                dbInfo = dbInfo
+            });
         }
 
         public class LoginModel

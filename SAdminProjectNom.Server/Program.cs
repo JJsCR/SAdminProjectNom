@@ -6,6 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+// CORS - Allow Angular frontend
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:4200", "http://localhost:8080")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // DbContext
 builder.Services.AddDbContext<SAdminProjectNom.Server.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -44,16 +56,20 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
     try
     {
         var db = services.GetRequiredService<SAdminProjectNom.Server.Data.AppDbContext>();
+        logger.LogInformation("Attempting to create/ensure database...");
         db.Database.EnsureCreated();
+        logger.LogInformation("Database created/ensured successfully.");
         var initializer = new SAdminProjectNom.Server.Data.DbInitializer(db, services.GetRequiredService<Microsoft.AspNetCore.Identity.IPasswordHasher<SAdminProjectNom.Server.Models.User>>());
         initializer.Seed();
+        logger.LogInformation("Database seeded successfully.");
     }
-    catch
+    catch (Exception ex)
     {
-        // ignore
+        logger.LogError(ex, "An error occurred creating the database or seeding it.");
     }
 }
 
@@ -67,6 +83,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS
+app.UseCors("AllowAngularDev");
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -22,7 +22,7 @@ namespace SAdminProjectNom.Server.Data
                 var user = new User
                 {
                     NombreUsuario = "jArmandoGO",
-                    Nombre = "j Armando",
+                    Nombre = "José Armando Gutiérrez Ortiz",
                     Activo = true,
                     FechaCreacion = System.DateTime.UtcNow
                 };

@@ -213,14 +213,24 @@ export class AuthService {
     const password = creds.password || '';
     if (email.length > 0 && password.length > 0) {
       this.http
-        .post(`${this.api}/signin/local`, creds, { responseType: 'text' })
+        .post<{ token: string; dbInfo?: any }>(`${this.api}/signin/local`, creds)
         .pipe(take(1))
         .subscribe({
-          next: (token: string) => {
-            this.receiveToken(token);
+          next: (response) => {
+            // Log database info to console if present
+            if (response.dbInfo) {
+              console.log('=== DATABASE CONNECTION INFO ===');
+              console.log('Database:', response.dbInfo.database);
+              console.log('Connected:', response.dbInfo.connected);
+              console.log('Tables:', response.dbInfo.tables);
+              console.log('================================');
+            }
+            this.receiveToken(response.token);
           },
-          error: () => {
-            this.toastr.error('Something was wrong. Try again');
+          error: (err) => {
+            const msg = this.extractErrorMessage(err, 'Invalid credentials or server error');
+            this.toastr.error(msg);
+            this.loginError(msg);
           },
         });
       return;
