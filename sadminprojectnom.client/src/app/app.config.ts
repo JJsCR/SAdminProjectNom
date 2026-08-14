@@ -29,8 +29,8 @@ const buildRuntimeConfig = (): AppRuntimeConfig => {
     portApi,
     baseURLApi,
     auth: {
-      email: 'admin@flatlogic.com',
-      password: 'password',
+      email: 'jArmandoGO',
+      password: '8822',
     },
   };
 };

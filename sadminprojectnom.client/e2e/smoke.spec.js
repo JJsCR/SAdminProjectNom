@@ -5,7 +5,7 @@ async function mockAuthenticatedSession(page) {
     window.localStorage.setItem('token', 'e2e-token');
     window.localStorage.setItem(
       'user',
-      JSON.stringify({ email: 'admin@flatlogic.com' }),
+      JSON.stringify({ email: 'jArmandoGO' }),
     );
   });
 }

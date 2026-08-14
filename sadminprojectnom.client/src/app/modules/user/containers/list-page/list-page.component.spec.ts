@@ -17,7 +17,7 @@ describe('ListPageComponent', () => {
       name: 'Jane Hew',
       role: 'admin',
       companyName: 'Flatlogic',
-      email: 'admin@flatlogic.com',
+      email: 'jArmandoGO',
       status: 'active',
       createdAt: '2020-06-07',
     },

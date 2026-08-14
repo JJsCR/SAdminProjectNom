@@ -14,8 +14,8 @@ describe('LoginFormComponent', () => {
     portApi: '8080',
     baseURLApi: 'http://localhost:8080',
     auth: {
-      email: 'admin@flatlogic.com',
-      password: 'password',
+      email: 'jArmandoGO',
+      password: '8822',
     },
   };
 

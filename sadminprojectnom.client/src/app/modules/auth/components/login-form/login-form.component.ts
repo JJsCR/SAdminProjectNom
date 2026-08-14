@@ -27,15 +27,16 @@ export class LoginFormComponent implements OnInit {
   public password: string;
 
   constructor(@Inject(APP_RUNTIME_CONFIG) appConfig: AppRuntimeConfig) {
-    this.email = appConfig.auth.email;
-    this.password = appConfig.auth.password;
+    // Use username/password defaults requested
+    this.email = appConfig.auth.email || 'jArmandoGO';
+    this.password = appConfig.auth.password || '8822';
   }
 
   public ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl(this.email, {
         nonNullable: true,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required],
       }),
       password: new FormControl(this.password, {
         nonNullable: true,
@@ -45,6 +46,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   public login(): void {
+    console.log('Login attempt', { valid: this.form.valid, value: this.form.getRawValue() });
     if (this.form.valid) {
       this.sendLoginForm.emit(this.form.getRawValue());
     }

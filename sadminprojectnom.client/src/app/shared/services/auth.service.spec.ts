@@ -17,8 +17,8 @@ describe('AuthService', () => {
     portApi: '8080',
     baseURLApi: 'http://localhost:8080',
     auth: {
-      email: 'admin@flatlogic.com',
-      password: 'password',
+      email: 'jArmandoGO',
+      password: '8822',
     },
   });
 
@@ -56,12 +56,12 @@ describe('AuthService', () => {
 
     expect(localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)).toBe('token-value');
     expect(localStorage.getItem(AUTH_USER_STORAGE_KEY)).toBe(
-      JSON.stringify({ email: 'admin@flatlogic.com' }),
+      JSON.stringify({ email: 'jArmandoGO' }),
     );
     expect(router.navigate).toHaveBeenCalledWith([routes.DASHBOARD]);
 
     const currentUser = await firstValueFrom(service.getCurrentUserInfo());
-    expect(currentUser.email).toBe('admin@flatlogic.com');
+    expect(currentUser.email).toBe('jArmandoGO');
   });
 
   it('clears auth storage and redirects to login on logout', () => {

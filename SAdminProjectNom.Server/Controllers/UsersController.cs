@@ -63,7 +63,7 @@ namespace SAdminProjectNom.Server.Controllers
             // Map to frontend UsersList shape
             var rows = users.Select(u => new
             {
-                id = u.Id.toString(),
+                id = u.Id.ToString(),
             });
 
             // Build rows with expected client model
@@ -72,15 +72,15 @@ namespace SAdminProjectNom.Server.Controllers
                 id = u.Id.ToString(),
                 firstName = (u.Nombre ?? string.Empty).Split(' ').FirstOrDefault() ?? string.Empty,
                 lastName = string.Join(' ', (u.Nombre ?? string.Empty).Split(' ').Skip(1)).Trim(),
-                phoneNumber = '',
-                email = '',
+                phoneNumber = "",
+                email = "",
                 role = "user",
                 disabled = !u.Activo,
-                password = '',
+                password = "",
                 emailVerified = true,
-                emailVerificationToken = '',
+                emailVerificationToken = "",
                 emailVerificationTokenExpiresAt = (DateTime?)null,
-                passwordResetToken = '',
+                passwordResetToken = "",
                 passwordResetTokenExpiresAt = (DateTime?)null,
                 provider = "local",
                 avatar = new object[] { },

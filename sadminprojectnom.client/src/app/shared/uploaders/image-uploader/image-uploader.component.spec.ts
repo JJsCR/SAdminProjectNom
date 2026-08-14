@@ -13,8 +13,8 @@ describe('ImageUploaderComponent', () => {
     baseURLApi: 'http://localhost:8080',
     isBackend: false,
     auth: {
-      email: 'admin@flatlogic.com',
-      password: 'password',
+      email: 'jArmandoGO',
+      password: '8822',
     },
   };
   const uploaderServiceMock = {
