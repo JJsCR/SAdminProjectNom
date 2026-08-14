@@ -19,6 +19,10 @@ namespace SAdminProjectNom.Server.Models
         [Column("Precio")]
         public decimal Price { get; set; }
 
+        [Column("Foto")]
+        [MaxLength(500)]
+        public string? Foto { get; set; }
+
         [Column("Activo")]
         public bool IsActive { get; set; } = true;
 

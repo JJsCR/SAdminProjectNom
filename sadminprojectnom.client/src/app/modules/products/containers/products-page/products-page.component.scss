@@ -33,6 +33,53 @@
   }
 }
 
+// --- Sección foto ---
+
+.image-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.file-input {
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.image-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.preview-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3f51b5;
+}
+
+.preview-label {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+// --- Acciones ---
+
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -44,12 +91,36 @@
   }
 }
 
+// --- Tabla ---
+
 .table-wrapper {
   overflow-x: auto;
 }
 
 .products-table {
   width: 100%;
+}
+
+.product-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+  display: block;
+}
+
+.product-avatar-placeholder {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #3f51b5;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .status-chip {

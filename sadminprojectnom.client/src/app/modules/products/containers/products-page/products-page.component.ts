@@ -46,8 +46,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   form: FormGroup;
   isLoading = signal(false);
+  imagePreview = signal<string | null>(null);
   dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns = ['name', 'price', 'status', 'actions'];
+  displayedColumns = ['foto', 'name', 'price', 'status', 'actions'];
 
   constructor(
     private fb: FormBuilder,
@@ -82,18 +83,29 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => this.imagePreview.set(e.target?.result as string);
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
   onSubmit(): void {
     if (this.form.invalid) return;
 
     const dto: CreateProductDto = {
       name: this.form.value.name,
       price: this.form.value.price,
+      foto: this.imagePreview() ?? undefined,
     };
 
     this.productsService.create(dto).subscribe({
       next: (created) => {
         this.dataSource.data = [created, ...this.dataSource.data];
         this.form.reset();
+        this.imagePreview.set(null);
         this.snackBar.open('Producto guardado correctamente', 'Cerrar', { duration: 3000 });
       },
       error: () => {
@@ -115,5 +127,8 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       },
     });
   }
-}
 
+  getInitial(name: string): string {
+    return name ? name.charAt(0).toUpperCase() : '?';
+  }
+}
