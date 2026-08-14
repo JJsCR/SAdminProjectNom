@@ -2,8 +2,8 @@ import {
   Component,
   OnInit,
   signal,
-  computed,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -16,12 +16,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProductsService } from '../../services/products.service';
 import { Product, CreateProductDto } from '../../models/product.model';
 
@@ -38,24 +36,17 @@ import { Product, CreateProductDto } from '../../models/product.model';
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
-    MatChipsModule,
     MatSnackBarModule,
   ],
   templateUrl: './products-page.component.html',
   styleUrls: ['./products-page.component.scss'],
 })
-export class ProductsPageComponent implements OnInit {
+export class ProductsPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   form: FormGroup;
-  products = signal<Product[]>([]);
   isLoading = signal(false);
-
-  dataSource = computed(() => {
-    const ds = new MatTableDataSource(this.products());
-    return ds;
-  });
-
+  dataSource = new MatTableDataSource<Product>([]);
   displayedColumns = ['name', 'price', 'status', 'actions'];
 
   constructor(
@@ -73,17 +64,16 @@ export class ProductsPageComponent implements OnInit {
     this.loadProducts();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
   loadProducts(): void {
     this.isLoading.set(true);
     this.productsService.getAll().subscribe({
       next: (data) => {
-        this.products.set(data);
+        this.dataSource.data = data;
         this.isLoading.set(false);
-        setTimeout(() => {
-          if (this.paginator) {
-            this.dataSource().paginator = this.paginator;
-          }
-        });
       },
       error: () => {
         this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 });
@@ -102,7 +92,7 @@ export class ProductsPageComponent implements OnInit {
 
     this.productsService.create(dto).subscribe({
       next: (created) => {
-        this.products.update((list) => [created, ...list]);
+        this.dataSource.data = [created, ...this.dataSource.data];
         this.form.reset();
         this.snackBar.open('Producto guardado correctamente', 'Cerrar', { duration: 3000 });
       },
@@ -116,8 +106,8 @@ export class ProductsPageComponent implements OnInit {
     const newStatus = !product.isActive;
     this.productsService.patchStatus(product.id, newStatus).subscribe({
       next: () => {
-        this.products.update((list) =>
-          list.map((p) => (p.id === product.id ? { ...p, isActive: newStatus } : p)),
+        this.dataSource.data = this.dataSource.data.map((p) =>
+          p.id === product.id ? { ...p, isActive: newStatus } : p,
         );
       },
       error: () => {
@@ -126,3 +116,4 @@ export class ProductsPageComponent implements OnInit {
     });
   }
 }
+
