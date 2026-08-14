@@ -119,6 +119,14 @@ export const APP_ROUTES: Routes = [
         loadChildren: () =>
           import('./modules/pages/pages.routes').then((m) => m.PAGES_ROUTES),
       },
+      {
+        path: 'products',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./modules/products/products.routes').then(
+            (m) => m.PRODUCTS_ROUTES,
+          ),
+      },
     ],
   },
   {

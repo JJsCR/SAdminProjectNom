@@ -83,4 +83,8 @@ export enum routes {
   GALLERY = '/extra/gallery',
   SEARCH_RESULT = '/extra/search-result',
   TIME_LINE = '/extra/time-line',
+
+  // --- Products module ---//
+
+  PRODUCTS_PAGE = '/products',
 }
