@@ -28,23 +28,6 @@
               <mat-error>El precio debe ser mayor o igual a 0</mat-error>
             }
           </mat-form-field>
-
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Ciudad</mat-label>
-            <input matInput formControlName="city" placeholder="Ej: San José" />
-          </mat-form-field>
-        </div>
-
-        <div class="image-row">
-          <div class="image-upload">
-            <label class="file-label">Imagen (opcional)</label>
-            <input type="file" accept="image/*" (change)="onFileChange($event)" />
-          </div>
-          @if (imagePreview()) {
-            <div class="image-preview">
-              <img [src]="imagePreview()" alt="Vista previa" class="preview-img" />
-            </div>
-          }
         </div>
 
         <div class="form-actions">
@@ -77,18 +60,6 @@
         <div class="table-wrapper">
           <table mat-table [dataSource]="dataSource()" class="products-table">
 
-            <!-- Columna Imagen -->
-            <ng-container matColumnDef="image">
-              <th mat-header-cell *matHeaderCellDef>FOTO</th>
-              <td mat-cell *matCellDef="let row">
-                @if (row.imageUrl) {
-                  <img [src]="row.imageUrl" class="product-avatar" [alt]="row.name" />
-                } @else {
-                  <div class="product-avatar-placeholder">{{ getInitial(row.name) }}</div>
-                }
-              </td>
-            </ng-container>
-
             <!-- Columna Nombre -->
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
@@ -99,12 +70,6 @@
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef>PRECIO</th>
               <td mat-cell *matCellDef="let row">{{ row.price | currency }}</td>
-            </ng-container>
-
-            <!-- Columna Ciudad -->
-            <ng-container matColumnDef="city">
-              <th mat-header-cell *matHeaderCellDef>CIUDAD</th>
-              <td mat-cell *matCellDef="let row">{{ row.city || '—' }}</td>
             </ng-container>
 
             <!-- Columna Estado -->

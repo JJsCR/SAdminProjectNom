@@ -48,7 +48,6 @@ export class ProductsPageComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   form: FormGroup;
-  imagePreview = signal<string | null>(null);
   products = signal<Product[]>([]);
   isLoading = signal(false);
 
@@ -57,7 +56,7 @@ export class ProductsPageComponent implements OnInit {
     return ds;
   });
 
-  displayedColumns = ['image', 'name', 'price', 'city', 'status', 'actions'];
+  displayedColumns = ['name', 'price', 'status', 'actions'];
 
   constructor(
     private fb: FormBuilder,
@@ -67,7 +66,6 @@ export class ProductsPageComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
-      city: [''],
     });
   }
 
@@ -94,30 +92,18 @@ export class ProductsPageComponent implements OnInit {
     });
   }
 
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => this.imagePreview.set(e.target?.result as string);
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
   onSubmit(): void {
     if (this.form.invalid) return;
 
     const dto: CreateProductDto = {
       name: this.form.value.name,
       price: this.form.value.price,
-      city: this.form.value.city || undefined,
-      imageUrl: this.imagePreview() || undefined,
     };
 
     this.productsService.create(dto).subscribe({
       next: (created) => {
         this.products.update((list) => [created, ...list]);
         this.form.reset();
-        this.imagePreview.set(null);
         this.snackBar.open('Producto guardado correctamente', 'Cerrar', { duration: 3000 });
       },
       error: () => {
@@ -138,9 +124,5 @@ export class ProductsPageComponent implements OnInit {
         this.snackBar.open('Error al cambiar estado', 'Cerrar', { duration: 3000 });
       },
     });
-  }
-
-  getInitial(name: string): string {
-    return name ? name.charAt(0).toUpperCase() : '?';
   }
 }

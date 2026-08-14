@@ -22,8 +22,6 @@ namespace SAdminProjectNom.Server.Controllers
             public int Id { get; set; }
             public string Name { get; set; } = string.Empty;
             public decimal Price { get; set; }
-            public string? City { get; set; }
-            public string? ImageUrl { get; set; }
             public bool IsActive { get; set; }
             public DateTime CreatedAt { get; set; }
         }
@@ -32,8 +30,6 @@ namespace SAdminProjectNom.Server.Controllers
         {
             public string Name { get; set; } = string.Empty;
             public decimal Price { get; set; }
-            public string? City { get; set; }
-            public string? ImageUrl { get; set; }
         }
 
         public class PatchStatusDto
@@ -52,8 +48,6 @@ namespace SAdminProjectNom.Server.Controllers
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
-                    City = p.City,
-                    ImageUrl = p.ImageUrl,
                     IsActive = p.IsActive,
                     CreatedAt = p.CreatedAt
                 })
@@ -73,8 +67,6 @@ namespace SAdminProjectNom.Server.Controllers
             {
                 Name = dto.Name,
                 Price = dto.Price,
-                City = dto.City,
-                ImageUrl = dto.ImageUrl,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
@@ -87,8 +79,6 @@ namespace SAdminProjectNom.Server.Controllers
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
-                City = product.City,
-                ImageUrl = product.ImageUrl,
                 IsActive = product.IsActive,
                 CreatedAt = product.CreatedAt
             });

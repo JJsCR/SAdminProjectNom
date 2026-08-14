@@ -19,12 +19,6 @@ namespace SAdminProjectNom.Server.Models
         [Column("Precio")]
         public decimal Price { get; set; }
 
-        [Column("Ciudad")]
-        public string? City { get; set; }
-
-        [Column("ImageUrl")]
-        public string? ImageUrl { get; set; }
-
         [Column("Activo")]
         public bool IsActive { get; set; } = true;
 
