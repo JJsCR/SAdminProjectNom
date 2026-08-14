@@ -22,8 +22,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ProductsService } from '../services/products.service';
-import { Product, CreateProductDto } from '../models/product.model';
+import { ProductsService } from '../../services/products.service';
+import { Product, CreateProductDto } from '../../models/product.model';
 
 @Component({
   selector: 'app-products-page',
