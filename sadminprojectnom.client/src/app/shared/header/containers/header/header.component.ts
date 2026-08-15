@@ -11,8 +11,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
-import { NotificationsComponent } from '../../components/notifications/notifications.component';
-import { SearchComponent } from '../../components/search/search.component';
 import { UserComponent } from '../../components/user/user.component';
 
 @Component({
@@ -26,8 +24,6 @@ import { UserComponent } from '../../components/user/user.component';
       MatIconModule,
       MatToolbarModule,
       MatBadgeModule,
-      SearchComponent,
-      NotificationsComponent,
       UserComponent,
     ]
 })

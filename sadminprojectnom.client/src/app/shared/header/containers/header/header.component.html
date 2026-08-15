@@ -17,19 +17,18 @@
             >
           }
         </button>
-        <h6 class="header__title-text">Angular Material Admin</h6>
+        <h6 class="header__title-text">Sistema Administrativo</h6>
       </div>
 
       <div class="header-toolbar">
-        <app-search></app-search>
         <button mat-icon-button (click)="goToCart()" class="cart-btn">
           <mat-icon
             [matBadge]="(cartCount$ | async) || 0"
             matBadgeColor="warn"
+            matBadgeSize="small"
             [matBadgeHidden]="(cartCount$ | async) === 0"
           >shopping_cart</mat-icon>
         </button>
-        <app-notifications></app-notifications>
         <app-user [user]="user$ | async" (signOut)="signOut()"></app-user>
       </div>
     </mat-toolbar>

@@ -1,19 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { routes } from '../../../../consts';
-import {ProductsService} from '../../services';
-import {Observable} from 'rxjs';
-import {ProductCard} from '../../models';
-import {FormControl, FormGroup } from '@angular/forms';
-
-type ProductsFilterControls = {
-  type: FormControl<string>;
-  brands: FormControl<string>;
-  size: FormControl<string>;
-  color: FormControl<string>;
-  range: FormControl<string>;
-  sort: FormControl<string>;
-};
+import { ProductsService } from '../../services';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ProductCard } from '../../models';
 
 @Component({
     selector: 'app-products-page',
@@ -23,45 +14,24 @@ type ProductsFilterControls = {
 })
 export class ProductsPageComponent implements OnInit {
   public routes: typeof routes = routes;
-  public products$: Observable<ProductCard[]>
-  public form!: FormGroup<ProductsFilterControls>;
+  public filteredProducts$: Observable<ProductCard[]>;
+  private searchTerm$ = new BehaviorSubject<string>('');
+  private allProducts$: Observable<ProductCard[]>;
 
   constructor(private service: ProductsService) {
-    this.products$ = this.service.getProducts();
+    this.allProducts$ = this.service.getProducts();
+    this.filteredProducts$ = combineLatest([this.allProducts$, this.searchTerm$]).pipe(
+      map(([products, term]) => {
+        if (!term.trim()) return products;
+        const lower = term.toLowerCase();
+        return products.filter(p => p.title.toLowerCase().includes(lower));
+      })
+    );
   }
 
-  public ngOnInit() {
-    this.form = new FormGroup<ProductsFilterControls>({
-      type: new FormControl('shoes', { nonNullable: true }),
-      brands: new FormControl('all', { nonNullable: true }),
-      size: new FormControl('7', { nonNullable: true }),
-      color: new FormControl('all', { nonNullable: true }),
-      range: new FormControl('all', { nonNullable: true }),
-      sort: new FormControl('favorite', { nonNullable: true }),
-    });
-  }
+  public ngOnInit() {}
 
-  get type(): FormControl<string> {
-    return this.form.controls.type;
-  }
-
-  get brands(): FormControl<string> {
-    return this.form.controls.brands;
-  }
-
-  get size(): FormControl<string> {
-    return this.form.controls.size;
-  }
-
-  get color(): FormControl<string> {
-    return this.form.controls.color;
-  }
-
-  get range(): FormControl<string> {
-    return this.form.controls.range;
-  }
-
-  get sort(): FormControl<string> {
-    return this.form.controls.sort;
+  onSearch(value: string): void {
+    this.searchTerm$.next(value);
   }
 }

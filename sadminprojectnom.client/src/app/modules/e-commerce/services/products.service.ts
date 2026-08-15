@@ -1,163 +1,33 @@
 import { Injectable } from '@angular/core';
-
-import { Observable, of } from 'rxjs';
-import {ProductCard} from '../models';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ProductCard } from '../models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
+  constructor(private http: HttpClient) {}
+
   public getProducts(): Observable<ProductCard[]> {
-    return of([
-      {
-        id: '1',
-        image: './assets/e-commerce/products/1.png',
-        title: 'Trainers',
-        subtitle: 'Trainers in white',
-        price: 42000,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '2',
-        image: './assets/e-commerce/products/2.png',
-        title: 'Boots',
-        subtitle: 'Trainers in blue',
-        price: 19500,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '3',
-        image: './assets/e-commerce/products/3.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in white',
-        price: 36750,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '4',
-        image: './assets/e-commerce/products/4.png',
-        title: 'Trainers',
-        subtitle: 'Trainers in blue',
-        price: 44625,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '5',
-        image: './assets/e-commerce/products/5.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in white',
-        price: 6300,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '6',
-        image: './assets/e-commerce/products/6.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in blue',
-        price: 39900,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '7',
-        image: './assets/e-commerce/products/1.png',
-        title: 'Trainers',
-        subtitle: 'Trainers in white',
-        price: 42000,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '8',
-        image: './assets/e-commerce/products/2.png',
-        title: 'Boots',
-        subtitle: 'Trainers in blue',
-        price: 19500,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '9',
-        image: './assets/e-commerce/products/3.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in white',
-        price: 36750,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '10',
-        image: './assets/e-commerce/products/4.png',
-        title: 'Trainers',
-        subtitle: 'Trainers in blue',
-        price: 44625,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '11',
-        image: './assets/e-commerce/products/5.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in white',
-        price: 6300,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '12',
-        image: './assets/e-commerce/products/6.png',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in blue',
-        price: 39900,
-        rating: '4.6',
-        status: 'Sale'
-      }
-    ]);
+    return this.http.get<any[]>('/api/products').pipe(
+      map(products => products
+        .filter(p => p.isActive)
+        .map(p => ({
+          id: String(p.id),
+          image: p.foto || './assets/e-commerce/products/1.png',
+          title: p.name,
+          subtitle: '',
+          price: p.price,
+          rating: '',
+          status: ''
+        }))
+      )
+    );
   }
 
   public getSimilarProducts(): Observable<ProductCard[]> {
-    return of([
-      {
-        id: '1',
-        image: './assets/e-commerce/products/1.jpg',
-        title: 'Trainers',
-        subtitle: 'Trainers in white',
-        price: 42000,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '2',
-        image: './assets/e-commerce/products/2.jpg',
-        title: 'Boots',
-        subtitle: 'Trainers in blue',
-        price: 19500,
-        rating: '4.6',
-        status: 'Sale'
-      },
-      {
-        id: '3',
-        image: './assets/e-commerce/products/3.jpg',
-        title: 'Flat sandals',
-        subtitle: 'Trainers in white',
-        price: 36750,
-        rating: '4.6',
-        status: 'New'
-      },
-      {
-        id: '4',
-        image: './assets/e-commerce/products/4.jpg',
-        title: 'Trainers',
-        subtitle: 'Trainers in blue',
-        price: 44625,
-        rating: '4.6',
-        status: 'Sale'
-      }
-    ]);
+    return this.getProducts();
   }
 }

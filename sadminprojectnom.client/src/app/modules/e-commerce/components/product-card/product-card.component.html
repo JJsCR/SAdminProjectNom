@@ -1,12 +1,6 @@
 <mat-card appearance="outlined" class="product-card">
   <div class="product-media">
     <img src="{{product.image}}" alt="{{product.title}}" class="product-img">
-    <span
-      class="product-status"
-      [ngClass]="product.status === 'Sale' ? 'sale' : 'new'"
-    >
-      {{product.status}}
-    </span>
   </div>
 
   <div class="product-title-wrapper">

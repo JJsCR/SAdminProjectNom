@@ -1,10 +1,10 @@
 <div class="user-wrapper">
-  <img
+  <div
     [matMenuTriggerFor]="userMenu"
-    [src]="avatar()"
-    alt="..."
-    class="user-icon"
-  />
+    class="user-initial-circle"
+  >
+    {{ firstUserLetter() }}
+  </div>
 
   <mat-menu #userMenu="matMenu" xPosition="before">
     <div class="user-menu-title">
@@ -37,6 +37,6 @@
   </mat-menu>
 
   <p class="greeting-text">
-    Hi, <span class="user-name">{{ user?.firstName }}</span>
+    Bienvenido, <span class="user-name">{{ user?.firstName }}</span>
   </p>
 </div>

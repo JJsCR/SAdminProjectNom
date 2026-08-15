@@ -3,7 +3,8 @@ import { routes } from '../../../../../consts';
 import { Observable } from 'rxjs';
 import { CartService, CartItem } from '../../../../../shared/services/cart.service';
 import { QuotesService } from '../../../../../shared/services/quotes.service';
-import { Project, Quote } from '../../../../../shared/models/quote.model';
+import { ProjectsService, ProjectDto } from '../../../../../shared/services/projects.service';
+import { Quote } from '../../../../../shared/models/quote.model';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -18,13 +19,14 @@ export class SearchResultPageComponent implements OnInit {
   public subtotal$: Observable<number>;
   public iva$: Observable<number>;
   public total$: Observable<number>;
-  public projects: Project[] = [];
+  public projects: ProjectDto[] = [];
   public selectedProjectId: string = '';
   public generatedQuote: Quote | null = null;
 
   constructor(
     public cartService: CartService,
-    private quotesService: QuotesService
+    private quotesService: QuotesService,
+    private projectsService: ProjectsService
   ) {
     this.cartItems$ = this.cartService.items$;
     this.subtotal$ = this.cartService.subtotal$;
@@ -33,7 +35,9 @@ export class SearchResultPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projects = this.quotesService.getProjects();
+    this.projectsService.getAll().subscribe(projects => {
+      this.projects = projects;
+    });
   }
 
   increaseQty(item: CartItem): void {
