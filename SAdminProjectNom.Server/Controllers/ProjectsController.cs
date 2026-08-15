@@ -20,7 +20,6 @@ namespace SAdminProjectNom.Server.Controllers
         public async Task<ActionResult<IEnumerable<Project>>> GetAll()
         {
             return await _context.Projects
-                .Where(p => p.IsActive)
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
@@ -31,7 +30,13 @@ namespace SAdminProjectNom.Server.Controllers
             var project = new Project
             {
                 Name = dto.Name,
-                Description = dto.Description
+                ClienteId = dto.ClienteId,
+                Ubicacion = dto.Ubicacion,
+                MontoObra = dto.MontoObra,
+                Estado = dto.Estado,
+                FechaInicio = dto.FechaInicio,
+                FechaFinEstimada = dto.FechaFinEstimada,
+                FechaCreacion = DateTime.UtcNow
             };
 
             _context.Projects.Add(project);
@@ -44,6 +49,11 @@ namespace SAdminProjectNom.Server.Controllers
     public class CreateProjectDto
     {
         public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
+        public int ClienteId { get; set; }
+        public string Ubicacion { get; set; } = string.Empty;
+        public decimal MontoObra { get; set; }
+        public string Estado { get; set; } = string.Empty;
+        public DateTime? FechaInicio { get; set; }
+        public DateTime? FechaFinEstimada { get; set; }
     }
 }

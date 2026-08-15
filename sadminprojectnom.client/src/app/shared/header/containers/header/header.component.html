@@ -16,19 +16,27 @@
             >arrow_back</mat-icon
             >
           }
-        </button>
-        <h6 class="header__title-text">Sistema Administrativo</h6>
-      </div>
+          </button>
+          <h6 class="header__title-text">Bienvenido, {{ (user$ | async)?.firstName || 'Usuario' }}</h6>
+        </div>
 
       <div class="header-toolbar">
         <button mat-icon-button (click)="goToCart()" class="cart-btn">
           <mat-icon
-            [matBadge]="(cartCount$ | async) || 0"
+            matBadge="{{(cartCount$ | async) || 0}}"
             matBadgeColor="warn"
             matBadgeSize="small"
+            matBadgePosition="above after"
             [matBadgeHidden]="(cartCount$ | async) === 0"
           >shopping_cart</mat-icon>
         </button>
-        <app-user [user]="user$ | async" (signOut)="signOut()"></app-user>
+        <app-user
+          [user]="user$ | async"
+          (signOut)="signOut()"
+          (themeOnBlue)="themeOnBlue.emit()"
+          (themeOnPink)="themeOnPink.emit()"
+          (themeOnGreen)="themeOnGreen.emit()"
+          (darkModeToggle)="darkModeToggle.emit($event)"
+        ></app-user>
       </div>
     </mat-toolbar>

@@ -28,9 +28,9 @@ export class SettingsMenuAppComponent {
   @Output() darkMode: EventEmitter<boolean> = new EventEmitter<boolean>();
   public isDarkMode: boolean = false;
 
-  public isBlueTheme: boolean = true;
+  public isBlueTheme: boolean = false;
   public isPinkTheme: boolean = false;
-  public isGreenTheme: boolean = false;
+  public isGreenTheme: boolean = true;
 
   public changeThemeOnBlue(): void {
     this.isBlueTheme = true;

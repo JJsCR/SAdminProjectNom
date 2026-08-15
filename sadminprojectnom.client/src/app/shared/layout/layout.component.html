@@ -7,14 +7,11 @@
   <app-header
     (isShowSidebar)="sidenav.toggle($event)"
     [isMenuOpened]="isShowSidebar"
-  ></app-header>
-
-  <app-settings-menu-app
-    (darkMode)="onDarkMode($event)"
     (themeOnBlue)="changeThemeOnBlue()"
     (themeOnPink)="changeThemeOnPink()"
     (themeOnGreen)="changeThemeOnGreen()"
-  ></app-settings-menu-app>
+    (darkModeToggle)="onDarkMode($event)"
+  ></app-header>
 
   <mat-sidenav-container class="layout">
     <mat-sidenav

@@ -7,11 +7,11 @@
   </div>
 
   <mat-menu #userMenu="matMenu" xPosition="before">
-    <div class="user-menu-title">
+    <div class="user-menu-title" (click)="$event.stopPropagation()">
       <h4 class="user-menu-title__name">
         {{ user?.firstName }} {{ user?.lastName }}
       </h4>
-      <a [href]="flatlogicEmail" class="user-menu-title__link">Flatlogic.com</a>
+      <span class="user-menu-title__link">{{ user?.email || 'Usuario' }}</span>
     </div>
     <button
       [routerLink]="routes.PROFILE"
@@ -19,19 +19,44 @@
       mat-menu-item
     >
       <mat-icon class="user-menu-icon">account_circle</mat-icon>
-      Profile
+      Perfil
     </button>
-    <button class="user-menu__item-title" mat-menu-item>
-      <mat-icon class="user-menu-icon">description</mat-icon>
-      Tasks
-    </button>
-    <button class="user-menu__item-title" mat-menu-item>
-      <mat-icon class="user-menu-icon">email</mat-icon>
-      Messages
-    </button>
+
+    <div class="theme-section" (click)="$event.stopPropagation()">
+      <p class="menu-title">COLOR THEME</p>
+      <div class="radio-group">
+        <mat-radio-button
+          color="primary"
+          [checked]="isBlueTheme"
+          (click)="changeThemeOnBlue()"
+        ></mat-radio-button>
+        <mat-radio-button
+          color="warn"
+          [checked]="isPinkTheme"
+          (click)="changeThemeOnPink()"
+        ></mat-radio-button>
+        <mat-radio-button
+          color="accent"
+          [checked]="isGreenTheme"
+          (click)="changeThemeOnGreen()"
+        ></mat-radio-button>
+      </div>
+
+      <hr class="bord" />
+
+      <p class="menu-title">DARK MODE</p>
+      <div class="slide-wrapper">
+        <mat-slide-toggle
+          [checked]="isDarkMode"
+          (change)="onDarkMode()"
+          color="warn"
+        ></mat-slide-toggle>
+      </div>
+    </div>
+
     <div class="sign-button-wrapper">
       <button (click)="signOutEmit()" class="sign-button" mat-flat-button>
-        Sign out
+        Cerrar sesión
       </button>
     </div>
   </mat-menu>

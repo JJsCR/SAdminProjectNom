@@ -66,6 +66,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.add-cart-btn {
+  font-size: 11px;
+  padding: 0 12px;
+  min-width: auto;
+  white-space: nowrap;
 }
 
 .product-price {

@@ -45,3 +45,25 @@
   display: flex;
   align-items: center;
 }
+
+.cart-btn {
+  overflow: visible !important;
+  position: relative;
+
+  .mat-icon {
+    overflow: visible !important;
+  }
+}
+
+::ng-deep .cart-btn {
+  overflow: visible !important;
+
+  .mat-mdc-icon-button {
+    overflow: visible !important;
+  }
+
+  .mat-badge-content {
+    z-index: 10 !important;
+    overflow: visible !important;
+  }
+}

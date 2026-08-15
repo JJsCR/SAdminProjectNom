@@ -291,7 +291,16 @@ export class AuthService {
     let user: Record<string, unknown>;
     if (this.config.isBackend) {
       const payload = this.decodeJwtPayload(token);
-      user = (payload?.user as Record<string, unknown>) || {};
+      if (payload) {
+        // Extract user info from JWT claims
+        user = {
+          id: payload['id'] || '',
+          firstName: payload['name'] || payload['sub'] || '',
+          email: payload['sub'] || '',
+        };
+      } else {
+        user = {};
+      }
     } else {
       user = { email: this.config.auth.email };
     }

@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/containers/header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FooterComponent } from '../footer/footer.component';
-import { SettingsMenuAppComponent } from '../settings-menu/settings-menu.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -27,7 +26,6 @@ import { CommonModule } from '@angular/common';
       HeaderComponent,
       SidebarComponent,
       FooterComponent,
-      SettingsMenuAppComponent,
     ]
 })
 export class LayoutComponent implements OnDestroy {
@@ -54,9 +52,9 @@ export class LayoutComponent implements OnDestroy {
     this.sidenav?.close();
   }
 
-  public isBlueTheme: boolean = true;
+  public isBlueTheme: boolean = false;
   public isPinkTheme: boolean = false;
-  public isGreenTheme: boolean = false;
+  public isGreenTheme: boolean = true;
   public isDarkMode: boolean = false;
 
   public changeThemeOnBlue(): void {
