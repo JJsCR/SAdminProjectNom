@@ -20,11 +20,12 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ProductsService } from '../../services/products.service';
-import { Product, CreateProductDto } from '../../models/product.model';
+import { MatChipsModule } from '@angular/material/chips';
+import { ClientsService } from '../../services/clients.service';
+import { Client, CreateClientDto } from '../../models/client.model';
 
 @Component({
-  selector: 'app-products-page',
+  selector: 'app-clients-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -37,71 +38,67 @@ import { Product, CreateProductDto } from '../../models/product.model';
     MatPaginatorModule,
     MatIconModule,
     MatSnackBarModule,
+    MatChipsModule,
   ],
-  templateUrl: './products-page.component.html',
-  styleUrls: ['./products-page.component.scss'],
+  templateUrl: './clients-page.component.html',
+  styleUrls: ['./clients-page.component.scss'],
 })
-export class ProductsPageComponent implements OnInit, AfterViewInit {
+export class ClientsPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   form: FormGroup;
   isLoading = signal(false);
-  imagePreview = signal<string | null>(null);
-  dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns = ['foto', 'name', 'price', 'status', 'actions'];
+  dataSource = new MatTableDataSource<Client>([]);
+  displayedColumns = ['nombreCompleto', 'cedula', 'celular', 'correo', 'fechaCreacion', 'estado', 'acciones'];
 
   constructor(
     private fb: FormBuilder,
-    private productsService: ProductsService,
+    private clientsService: ClientsService,
     private snackBar: MatSnackBar,
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(0)]],
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      cedula: [''],
+      celular: ['', Validators.required],
+      correo: ['', [Validators.email]],
     });
   }
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadClients();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  loadProducts(): void {
+  loadClients(): void {
     this.isLoading.set(true);
-    this.productsService.getAll().subscribe({
+    this.clientsService.getAll().subscribe({
       next: (data) => {
         this.dataSource.data = data;
         this.isLoading.set(false);
       },
       error: () => {
-        this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al cargar clientes', 'Cerrar', { duration: 3000 });
         this.isLoading.set(false);
       },
     });
   }
 
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => this.imagePreview.set(e.target?.result as string);
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
   onSubmit(): void {
     if (this.form.invalid) return;
 
-    const dto: CreateProductDto = {
-      name: this.form.value.name,
-      price: this.form.value.price,
-      foto: this.imagePreview() ?? undefined,
+    const dto: CreateClientDto = {
+      nombre: this.form.value.nombre,
+      apellido: this.form.value.apellido,
+      cedula: this.form.value.cedula || undefined,
+      celular: this.form.value.celular,
+      correo: this.form.value.correo || undefined,
     };
 
-    this.productsService.create(dto).subscribe({
+    this.clientsService.create(dto).subscribe({
       next: (created) => {
         this.dataSource.data = [created, ...this.dataSource.data];
         this.form.reset();
@@ -110,21 +107,25 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
           this.form.get(key)?.markAsUntouched();
           this.form.get(key)?.markAsPristine();
         });
-        this.imagePreview.set(null);
-        this.snackBar.open('Producto guardado correctamente', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Cliente guardado correctamente', 'Cerrar', { duration: 3000 });
       },
       error: () => {
-        this.snackBar.open('Error al guardar el producto', 'Cerrar', { duration: 3000 });
+        this.snackBar.open('Error al guardar el cliente', 'Cerrar', { duration: 3000 });
       },
     });
   }
 
-  toggleStatus(product: Product): void {
-    const newStatus = !product.isActive;
-    this.productsService.patchStatus(product.id, newStatus).subscribe({
+  toggleStatus(client: Client): void {
+    const newStatus = !client.activo;
+    this.clientsService.patchStatus(client.id, newStatus).subscribe({
       next: () => {
-        this.dataSource.data = this.dataSource.data.map((p) =>
-          p.id === product.id ? { ...p, isActive: newStatus } : p,
+        this.dataSource.data = this.dataSource.data.map((c) =>
+          c.id === client.id ? { ...c, activo: newStatus } : c,
+        );
+        this.snackBar.open(
+          `Cliente ${newStatus ? 'activado' : 'desactivado'} correctamente`,
+          'Cerrar',
+          { duration: 3000 }
         );
       },
       error: () => {
@@ -133,7 +134,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getInitial(name: string): string {
-    return name ? name.charAt(0).toUpperCase() : '?';
+  getNombreCompleto(client: Client): string {
+    return `${client.nombre} ${client.apellido}`;
   }
 }

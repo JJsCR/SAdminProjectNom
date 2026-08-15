@@ -87,4 +87,8 @@ export enum routes {
   // --- Products module ---//
 
   PRODUCTS_PAGE = '/products',
+
+  // --- Clients module ---//
+
+  CLIENTS_PAGE = '/clients',
 }
