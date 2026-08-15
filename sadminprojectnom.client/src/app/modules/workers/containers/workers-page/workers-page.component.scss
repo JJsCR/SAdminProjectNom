@@ -1,3 +1,6 @@
+@use '../../../../../styles/font' as *;
+@use '../../../../../styles/variables' as *;
+
 .workers-container {
   display: flex;
   flex-direction: column;
@@ -5,14 +8,20 @@
   padding: 24px;
 }
 
+// --- Form cards ---
+
 .form-card,
-.table-card,
 .edit-card {
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 11px 0 $shadow-white, 0 3px 3px -2px $shadow-grey, 0 1px 8px 0 $shadow-dark-grey;
+
   mat-card-title {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 18px;
+    font-size: $fs-medium;
+    font-weight: $fw-lighter;
   }
 }
 
@@ -46,33 +55,43 @@
   }
 }
 
-// --- Header tabla con buscador ---
+// --- Table card (template style) ---
 
-.table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
+.table-card {
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 11px 0 $shadow-white, 0 3px 3px -2px $shadow-grey, 0 1px 8px 0 $shadow-dark-grey;
 }
 
-.table-title {
+.table-card-header {
+  color: $grey;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  padding: 24px 24px 8px;
+  margin-bottom: 0;
+}
+
+.table-card-title {
+  font-size: $fs-medium;
+  font-weight: $fw-lighter;
+  margin: 0;
+  line-height: 40px;
 }
 
 .search-field {
-  max-width: 250px;
-  font-size: 13px;
+  max-width: 220px;
+  font-size: $fs-small;
 
   ::ng-deep .mat-mdc-form-field-subscript-wrapper {
     display: none;
   }
 }
 
-// --- Tabla ---
+// --- Table ---
 
-.table-wrapper {
+.table-content {
+  overflow-y: hidden;
   overflow-x: auto;
 }
 
@@ -80,8 +99,61 @@
   width: 100%;
 }
 
+.table-row-title {
+  color: $dark-grey;
+  font-size: $fs-normal;
+  line-height: 24px;
+  text-transform: uppercase;
+  padding: 16px;
+}
+
+.table-cell {
+  color: $dark-grey;
+  font-size: $fs-small;
+  padding: 16px;
+}
+
 .name-cell {
-  font-weight: 600;
+  color: $dark-grey;
+  font-size: $fs-small;
+  font-weight: $fw-normal;
+  padding: 16px;
+}
+
+// --- Avatar (mat-mini-fab style) ---
+
+.user-button {
+  font-size: 20px;
+  line-height: 36px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.avatar-name-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-name {
+  color: $dark-grey;
+  margin: 0 0 0 8px;
+  font-size: $fs-small;
+}
+
+// --- Status chip (template style) ---
+
+.status-chip-wrapper {
+  cursor: pointer;
+}
+
+::ng-deep .status-chip-wrapper .mat-mdc-chip {
+  cursor: pointer !important;
 }
 
 .loading-text {
@@ -90,64 +162,8 @@
   padding: 32px 0;
 }
 
-// --- Avatar ---
-
-.avatar-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  }
-}
-
-// --- Status pill ---
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 14px;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-  user-select: none;
-
-  &:hover {
-    opacity: 0.8;
-  }
-
-  .status-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-  }
-
-  &.active {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-
-  &.inactive {
-    background-color: #ffebee;
-    color: #c62828;
-  }
-}
-
 // --- Edit card ---
 
 .edit-card {
-  border-left: 4px solid #3f51b5;
+  border-left: 4px solid $blue;
 }

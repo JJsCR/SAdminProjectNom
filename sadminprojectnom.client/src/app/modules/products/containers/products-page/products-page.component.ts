@@ -20,6 +20,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 import { ProductsService } from '../../services/products.service';
 import { Product, CreateProductDto, UpdateProductDto } from '../../models/product.model';
 
@@ -43,6 +44,7 @@ const AVATAR_COLORS = [
     MatPaginatorModule,
     MatIconModule,
     MatSnackBarModule,
+    MatChipsModule,
   ],
   templateUrl: './products-page.component.html',
   styleUrls: ['./products-page.component.scss'],
@@ -57,7 +59,7 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   editImagePreview = signal<string | null>(null);
   selectedProduct = signal<Product | null>(null);
   dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns = ['foto', 'name', 'price', 'status'];
+  displayedColumns = ['name', 'price', 'status'];
 
   constructor(
     private fb: FormBuilder,

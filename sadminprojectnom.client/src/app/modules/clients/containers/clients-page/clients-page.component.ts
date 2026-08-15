@@ -57,7 +57,7 @@ export class ClientsPageComponent implements OnInit, AfterViewInit {
   isLoading = signal(false);
   selectedClient = signal<Client | null>(null);
   dataSource = new MatTableDataSource<Client>([]);
-  displayedColumns = ['avatar', 'nombreCompleto', 'cedula', 'celular', 'correo', 'fechaCreacion', 'estado'];
+  displayedColumns = ['nombreCompleto', 'correo', 'cedula', 'celular', 'fechaCreacion', 'estado'];
 
   constructor(
     private fb: FormBuilder,

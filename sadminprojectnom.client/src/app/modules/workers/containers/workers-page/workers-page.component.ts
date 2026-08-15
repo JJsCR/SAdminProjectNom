@@ -62,7 +62,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
   selectedWorker = signal<Worker | null>(null);
   searchValue = signal('');
   dataSource = new MatTableDataSource<Worker>([]);
-  displayedColumns = ['avatar', 'nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'fechaCreacion', 'estado'];
+  displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'fechaCreacion', 'estado'];
 
   constructor(
     private fb: FormBuilder,
