@@ -27,6 +27,7 @@ import {MatTableModule} from '@angular/material/table';
 import { TimeLineCardComponent } from './components/time-line-card/time-line-card.component';
 import {MatInputModule} from '@angular/material/input';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { BreadcrumbComponent } from '../../../shared/ui-elements';
 
 
@@ -64,6 +65,7 @@ import { BreadcrumbComponent } from '../../../shared/ui-elements';
         MatTableModule,
         MatInputModule,
         MatChipsModule,
+        MatFormFieldModule,
     ],
     providers: [
         GalleryService,

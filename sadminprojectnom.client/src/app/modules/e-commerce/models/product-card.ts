@@ -3,7 +3,7 @@ export interface ProductCard {
   image: string;
   title: string;
   subtitle: string;
-  price: string;
+  price: number; // Precio en colones costarricenses (₡)
   rating: string;
   status: string;
 }

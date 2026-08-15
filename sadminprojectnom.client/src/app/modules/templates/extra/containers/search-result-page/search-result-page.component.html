@@ -1,33 +1,130 @@
 <app-breadcrumb [path]="routes.SEARCH_RESULT"></app-breadcrumb>
 
-<div class="tool-box">
-  <div class="time-selects-wrapper">
-    <app-type-item-select></app-type-item-select>
-    <app-time-period-select></app-time-period-select>
+<h2 class="page-title">Carrito de Compras / Cotización</h2>
+
+<!-- Modal de confirmación -->
+@if (generatedQuote) {
+  <div class="quote-confirmation-overlay">
+    <mat-card class="quote-confirmation">
+      <h3>✅ Cotización Generada Exitosamente</h3>
+      <p><strong>ID:</strong> {{generatedQuote.id}}</p>
+      <p><strong>Fecha:</strong> {{generatedQuote.date | date:'dd/MM/yyyy HH:mm'}}</p>
+      <p><strong>Proyecto:</strong> {{generatedQuote.projectName}}</p>
+      <hr>
+      <table class="quote-table">
+        <thead>
+          <tr><th>Producto</th><th>Cant.</th><th>Precio Unit.</th><th>Total</th></tr>
+        </thead>
+        <tbody>
+          @for (d of generatedQuote.details; track d.productId) {
+            <tr>
+              <td>{{d.productName}}</td>
+              <td>{{d.quantity}}</td>
+              <td>₡{{d.priceApplied | number}}</td>
+              <td>₡{{d.totalItem | number}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <div class="quote-totals">
+        <p>Subtotal: <strong>₡{{generatedQuote.subtotal | number}}</strong></p>
+        <p>IVA (13%): <strong>₡{{generatedQuote.iva | number}}</strong></p>
+        <p class="grand-total">Total: <strong>₡{{generatedQuote.total | number}}</strong></p>
+      </div>
+      <button mat-raised-button color="primary" (click)="closeConfirmation()">Cerrar</button>
+    </mat-card>
   </div>
+}
 
-  <div class="view-mode-wrapper">
-    <span class="view-mode-title">View</span>
-    <mat-button-toggle-group>
-    <mat-button-toggle value="left" [checked]="true">
-      <mat-icon>format_align_justify</mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="right">
-      <mat-icon>border_all</mat-icon>
-    </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-</div>
+<div class="cart-layout">
+  <!-- COLUMNA IZQUIERDA: Lista de ítems -->
+  <div class="cart-items-column">
+    @for (item of (cartItems$ | async); track item.productId) {
+      <mat-card class="cart-item-card">
+        <div class="cart-item-row">
+          <img [src]="item.image" alt="{{item.title}}" class="cart-item-img">
 
-<p class="result-title">About 94 700 000 (0.39 sec.) results</p>
+          <div class="cart-item-info">
+            <p class="cart-item-title">{{item.title}}</p>
+            <p class="cart-item-price">Precio Lista: ₡{{item.priceBase | number}}</p>
 
-<div class="result-wrapper">
-  <div class="result-items-wrapper">
-    @for (result of (searchResults$ | async); track result) {
-      <app-search-result-item [result]="result"></app-search-result-item>
+            <div class="cart-item-special-price">
+              <mat-form-field appearance="outline" class="price-field">
+                <mat-label>Precio Especial (₡)</mat-label>
+                <input matInput type="number" [value]="item.priceApplied"
+                       (change)="onPriceChange(item, $any($event.target).value)"
+                       placeholder="Dejar vacío = precio lista">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="cart-item-qty">
+            <button mat-mini-fab color="primary" (click)="decreaseQty(item)" [disabled]="item.quantity <= 1">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span class="qty-value">{{item.quantity}}</span>
+            <button mat-mini-fab color="primary" (click)="increaseQty(item)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <button mat-icon-button color="warn" (click)="removeItem(item)" class="remove-btn">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </mat-card>
+    }
+
+    @if ((cartItems$ | async)?.length === 0) {
+      <p class="empty-cart">El carrito está vacío.</p>
     }
   </div>
-  <div class="result-filtering-wrapper">
-    <app-result-filtering></app-result-filtering>
+
+  <!-- COLUMNA DERECHA: Resumen de Cotización -->
+  <div class="cart-summary-column">
+    <mat-card class="summary-card">
+      <h3>Resumen de Cotización</h3>
+
+      <div class="summary-items">
+        @for (item of (cartItems$ | async); track item.productId) {
+          <div class="summary-line">
+            <span>{{item.title}} x{{item.quantity}}</span>
+            <span>₡{{((item.priceApplied !== null ? item.priceApplied : item.priceBase) * item.quantity) | number}}</span>
+          </div>
+        }
+      </div>
+
+      <hr>
+
+      <div class="summary-totals">
+        <div class="summary-line">
+          <span>Subtotal:</span>
+          <span>₡{{(subtotal$ | async) | number}}</span>
+        </div>
+        <div class="summary-line">
+          <span>IVA (13%):</span>
+          <span>₡{{(iva$ | async) | number}}</span>
+        </div>
+        <div class="summary-line total-line">
+          <span><strong>Total Cotizado:</strong></span>
+          <span><strong>₡{{(total$ | async) | number}}</strong></span>
+        </div>
+      </div>
+
+      <hr>
+
+      <mat-form-field appearance="outline" class="project-select">
+        <mat-label>Seleccionar Proyecto *</mat-label>
+        <mat-select [(value)]="selectedProjectId">
+          @for (project of projects; track project.id) {
+            <mat-option [value]="project.id">{{project.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" class="generate-btn" (click)="generateQuote()">
+        GENERAR COTIZACIÓN
+      </button>
+    </mat-card>
   </div>
 </div>

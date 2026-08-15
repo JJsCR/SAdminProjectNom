@@ -14,7 +14,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/1.png',
         title: 'Trainers',
         subtitle: 'Trainers in white',
-        price: '$80',
+        price: 42000,
         rating: '4.6',
         status: 'New'
       },
@@ -23,7 +23,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/2.png',
         title: 'Boots',
         subtitle: 'Trainers in blue',
-        price: '$37',
+        price: 19500,
         rating: '4.6',
         status: 'Sale'
       },
@@ -32,7 +32,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/3.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$70',
+        price: 36750,
         rating: '4.6',
         status: 'New'
       },
@@ -41,7 +41,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/4.png',
         title: 'Trainers',
         subtitle: 'Trainers in blue',
-        price: '$85',
+        price: 44625,
         rating: '4.6',
         status: 'Sale'
       },
@@ -50,7 +50,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/5.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$12',
+        price: 6300,
         rating: '4.6',
         status: 'New'
       },
@@ -59,7 +59,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/6.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in blue',
-        price: '$76',
+        price: 39900,
         rating: '4.6',
         status: 'Sale'
       },
@@ -68,7 +68,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/1.png',
         title: 'Trainers',
         subtitle: 'Trainers in white',
-        price: '$80',
+        price: 42000,
         rating: '4.6',
         status: 'New'
       },
@@ -77,7 +77,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/2.png',
         title: 'Boots',
         subtitle: 'Trainers in blue',
-        price: '$37',
+        price: 19500,
         rating: '4.6',
         status: 'Sale'
       },
@@ -86,7 +86,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/3.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$70',
+        price: 36750,
         rating: '4.6',
         status: 'New'
       },
@@ -95,7 +95,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/4.png',
         title: 'Trainers',
         subtitle: 'Trainers in blue',
-        price: '$85',
+        price: 44625,
         rating: '4.6',
         status: 'Sale'
       },
@@ -104,7 +104,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/5.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$12',
+        price: 6300,
         rating: '4.6',
         status: 'New'
       },
@@ -113,7 +113,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/6.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in blue',
-        price: '$76',
+        price: 39900,
         rating: '4.6',
         status: 'Sale'
       }
@@ -127,7 +127,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/1.jpg',
         title: 'Trainers',
         subtitle: 'Trainers in white',
-        price: '$80',
+        price: 42000,
         rating: '4.6',
         status: 'New'
       },
@@ -136,7 +136,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/2.jpg',
         title: 'Boots',
         subtitle: 'Trainers in blue',
-        price: '$37',
+        price: 19500,
         rating: '4.6',
         status: 'Sale'
       },
@@ -145,7 +145,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/3.jpg',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$70',
+        price: 36750,
         rating: '4.6',
         status: 'New'
       },
@@ -154,7 +154,7 @@ export class ProductsService {
         image: './assets/e-commerce/products/4.jpg',
         title: 'Trainers',
         subtitle: 'Trainers in blue',
-        price: '$85',
+        price: 44625,
         rating: '4.6',
         status: 'Sale'
       }

@@ -1,4 +1,4 @@
-<mat-card appearance="outlined" class="product-card" [routerLink]="[routes.PRODUCT, product.id]">
+<mat-card appearance="outlined" class="product-card">
   <div class="product-media">
     <img src="{{product.image}}" alt="{{product.title}}" class="product-img">
     <span
@@ -11,15 +11,13 @@
 
   <div class="product-title-wrapper">
     <p class="product-title">{{product.title}}</p>
-    <p class="product-subtitle">{{product.subtitle}}</p>
   </div>
 
   <div class="product-price-wrapper">
-    <p class="product-price">{{product.price}}</p>
+    <p class="product-price">₡{{product.price | number}}</p>
 
-    <div class="product-pop-wrapper">
-      <p class="product-pop">{{product.rating}}</p>
-      <mat-icon color="accent" class="pop-icon">star</mat-icon>
-    </div>
+    <button mat-raised-button color="primary" class="add-cart-btn" (click)="addToCart($event)">
+      AGREGAR CARRITO
+    </button>
   </div>
 </mat-card>

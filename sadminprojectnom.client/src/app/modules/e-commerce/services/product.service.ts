@@ -281,7 +281,7 @@ export class ProductService {
         image: './assets/e-commerce/products/1.png',
         title: 'Trainers',
         subtitle: 'Trainers in white',
-        price: '$80',
+        price: 42000,
         rating: '4.6',
         status: 'New'
       },
@@ -290,7 +290,7 @@ export class ProductService {
         image: './assets/e-commerce/products/2.png',
         title: 'Boots',
         subtitle: 'Trainers in blue',
-        price: '$37',
+        price: 19500,
         rating: '4.6',
         status: 'Sale'
       },
@@ -299,7 +299,7 @@ export class ProductService {
         image: './assets/e-commerce/products/3.png',
         title: 'Flat sandals',
         subtitle: 'Trainers in white',
-        price: '$70',
+        price: 36750,
         rating: '4.6',
         status: 'New'
       },
@@ -308,7 +308,7 @@ export class ProductService {
         image: './assets/e-commerce/products/4.png',
         title: 'Trainers',
         subtitle: 'Trainers in blue',
-        price: '$85',
+        price: 44625,
         rating: '4.6',
         status: 'Sale'
       }
