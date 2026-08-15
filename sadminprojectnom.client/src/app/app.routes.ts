@@ -135,6 +135,14 @@ export const APP_ROUTES: Routes = [
             (m) => m.CLIENTS_ROUTES,
           ),
       },
+      {
+        path: 'workers',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./modules/workers/workers.routes').then(
+            (m) => m.WORKERS_ROUTES,
+          ),
+      },
     ],
   },
   {

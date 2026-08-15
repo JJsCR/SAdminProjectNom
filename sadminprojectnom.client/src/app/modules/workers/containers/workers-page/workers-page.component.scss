@@ -1,4 +1,4 @@
-.clients-container {
+.workers-container {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -16,7 +16,7 @@
   }
 }
 
-.client-form {
+.worker-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -76,7 +76,7 @@
   overflow-x: auto;
 }
 
-.clients-table {
+.workers-table {
   width: 100%;
 }
 

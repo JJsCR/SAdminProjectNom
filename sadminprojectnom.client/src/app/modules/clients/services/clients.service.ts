@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateClientDto, Client } from '../models/client.model';
+import { CreateClientDto, UpdateClientDto, Client } from '../models/client.model';
 
 const baseUrl = '/api/clients';
 
@@ -17,6 +17,10 @@ export class ClientsService {
 
   create(dto: CreateClientDto): Observable<Client> {
     return this.http.post<Client>(baseUrl, dto);
+  }
+
+  update(id: number, dto: UpdateClientDto): Observable<Client> {
+    return this.http.put<Client>(`${baseUrl}/${id}`, dto);
   }
 
   patchStatus(id: number, activo: boolean): Observable<void> {

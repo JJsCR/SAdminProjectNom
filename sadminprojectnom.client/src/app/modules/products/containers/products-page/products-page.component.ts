@@ -21,7 +21,13 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductsService } from '../../services/products.service';
-import { Product, CreateProductDto } from '../../models/product.model';
+import { Product, CreateProductDto, UpdateProductDto } from '../../models/product.model';
+
+const AVATAR_COLORS = [
+  '#f44336', '#e91e63', '#9c27b0', '#673ab7',
+  '#3f51b5', '#2196f3', '#00bcd4', '#009688',
+  '#4caf50', '#ff9800', '#ff5722', '#795548',
+];
 
 @Component({
   selector: 'app-products-page',
@@ -45,10 +51,13 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   form: FormGroup;
+  editForm: FormGroup;
   isLoading = signal(false);
   imagePreview = signal<string | null>(null);
+  editImagePreview = signal<string | null>(null);
+  selectedProduct = signal<Product | null>(null);
   dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns = ['foto', 'name', 'price', 'status', 'actions'];
+  displayedColumns = ['foto', 'name', 'price', 'status'];
 
   constructor(
     private fb: FormBuilder,
@@ -59,6 +68,15 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       name: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
     });
+
+    this.editForm = this.fb.group({
+      name: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(0)]],
+    });
+
+    this.dataSource.filterPredicate = (data: Product, filter: string) => {
+      return data.name.toLowerCase().includes(filter.trim().toLowerCase());
+    };
   }
 
   ngOnInit(): void {
@@ -83,11 +101,25 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  applyFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = value;
+  }
+
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const reader = new FileReader();
       reader.onload = (e) => this.imagePreview.set(e.target?.result as string);
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  onEditFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => this.editImagePreview.set(e.target?.result as string);
       reader.readAsDataURL(input.files[0]);
     }
   }
@@ -126,6 +158,11 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
         this.dataSource.data = this.dataSource.data.map((p) =>
           p.id === product.id ? { ...p, isActive: newStatus } : p,
         );
+        this.snackBar.open(
+          `Producto ${newStatus ? 'activado' : 'desactivado'} correctamente`,
+          'Cerrar',
+          { duration: 3000 }
+        );
       },
       error: () => {
         this.snackBar.open('Error al cambiar estado', 'Cerrar', { duration: 3000 });
@@ -133,7 +170,53 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  selectProduct(product: Product): void {
+    this.selectedProduct.set(product);
+    this.editImagePreview.set(product.foto || null);
+    this.editForm.patchValue({
+      name: product.name,
+      price: product.price,
+    });
+  }
+
+  cancelEdit(): void {
+    this.selectedProduct.set(null);
+    this.editForm.reset();
+    this.editImagePreview.set(null);
+  }
+
+  onUpdate(): void {
+    const product = this.selectedProduct();
+    if (!product || this.editForm.invalid) return;
+
+    const dto: UpdateProductDto = {
+      name: this.editForm.value.name,
+      price: this.editForm.value.price,
+      foto: this.editImagePreview() ?? undefined,
+    };
+
+    this.productsService.update(product.id, dto).subscribe({
+      next: (updated) => {
+        this.dataSource.data = this.dataSource.data.map((p) =>
+          p.id === product.id ? updated : p,
+        );
+        this.selectedProduct.set(null);
+        this.editForm.reset();
+        this.editImagePreview.set(null);
+        this.snackBar.open('Producto actualizado correctamente', 'Cerrar', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Error al actualizar el producto', 'Cerrar', { duration: 3000 });
+      },
+    });
+  }
+
   getInitial(name: string): string {
     return name ? name.charAt(0).toUpperCase() : '?';
+  }
+
+  getAvatarColor(name: string): string {
+    const index = name ? name.charCodeAt(0) % AVATAR_COLORS.length : 0;
+    return AVATAR_COLORS[index];
   }
 }

@@ -12,5 +12,6 @@ namespace SAdminProjectNom.Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Worker> Workers { get; set; }
     }
 }

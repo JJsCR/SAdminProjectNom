@@ -91,4 +91,8 @@ export enum routes {
   // --- Clients module ---//
 
   CLIENTS_PAGE = '/clients',
+
+  // --- Workers module ---//
+
+  WORKERS_PAGE = '/workers',
 }

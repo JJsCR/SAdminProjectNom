@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateProductDto, Product } from '../models/product.model';
+import { CreateProductDto, UpdateProductDto, Product } from '../models/product.model';
 
 const baseUrl = '/api/products';
 
@@ -17,6 +17,10 @@ export class ProductsService {
 
   create(dto: CreateProductDto): Observable<Product> {
     return this.http.post<Product>(baseUrl, dto);
+  }
+
+  update(id: number, dto: UpdateProductDto): Observable<Product> {
+    return this.http.put<Product>(`${baseUrl}/${id}`, dto);
   }
 
   patchStatus(id: number, isActive: boolean): Observable<void> {

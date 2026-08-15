@@ -16,3 +16,11 @@ export interface CreateClientDto {
   celular: string;
   correo?: string;
 }
+
+export interface UpdateClientDto {
+  nombre: string;
+  apellido: string;
+  cedula?: string;
+  celular: string;
+  correo?: string;
+}

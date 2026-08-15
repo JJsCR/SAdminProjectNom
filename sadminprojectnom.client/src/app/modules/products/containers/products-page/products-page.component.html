@@ -62,9 +62,15 @@
   <!-- Bloque Inferior: Tabla de Productos -->
   <mat-card class="table-card">
     <mat-card-header>
-      <mat-card-title>
-        <mat-icon>list_alt</mat-icon>
-        Lista de Productos
+      <mat-card-title class="table-header">
+        <div class="table-title">
+          <mat-icon>list_alt</mat-icon>
+          Lista de Productos
+        </div>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput placeholder="Buscar por nombre..." (input)="applyFilter($event)" />
+        </mat-form-field>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -76,12 +82,17 @@
 
             <!-- Columna Foto -->
             <ng-container matColumnDef="foto">
-              <th mat-header-cell *matHeaderCellDef>FOTO</th>
+              <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let row">
                 @if (row.foto) {
-                  <img [src]="row.foto" class="product-avatar" [alt]="row.name" />
+                  <img [src]="row.foto" class="product-avatar clickable" [alt]="row.name" (click)="selectProduct(row)" title="Click para editar" />
                 } @else {
-                  <div class="product-avatar-placeholder">{{ getInitial(row.name) }}</div>
+                  <div
+                    class="product-avatar-placeholder clickable"
+                    [style.background-color]="getAvatarColor(row.name)"
+                    (click)="selectProduct(row)"
+                    title="Click para editar"
+                  >{{ getInitial(row.name) }}</div>
                 }
               </td>
             </ng-container>
@@ -98,28 +109,20 @@
               <td mat-cell *matCellDef="let row">₡{{ row.price | number:'1.2-2' }}</td>
             </ng-container>
 
-            <!-- Columna Estado -->
+            <!-- Columna Estado (clickeable) -->
             <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+              <th mat-header-cell *matHeaderCellDef>STATUS</th>
               <td mat-cell *matCellDef="let row">
-                <span class="status-chip" [class.active]="row.isActive" [class.inactive]="!row.isActive">
+                <span
+                  class="status-pill"
+                  [class.active]="row.isActive"
+                  [class.inactive]="!row.isActive"
+                  (click)="toggleStatus(row)"
+                  title="Click para cambiar estado"
+                >
+                  <mat-icon class="status-icon">{{ row.isActive ? 'check' : 'close' }}</mat-icon>
                   {{ row.isActive ? 'Activo' : 'Inactivo' }}
                 </span>
-              </td>
-            </ng-container>
-
-            <!-- Columna Acciones -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>ACCIÓN</th>
-              <td mat-cell *matCellDef="let row">
-                <button
-                  mat-icon-button
-                  [color]="row.isActive ? 'warn' : 'primary'"
-                  (click)="toggleStatus(row)"
-                  [title]="row.isActive ? 'Desactivar' : 'Activar'"
-                >
-                  <mat-icon>{{ row.isActive ? 'toggle_on' : 'toggle_off' }}</mat-icon>
-                </button>
               </td>
             </ng-container>
 
@@ -131,4 +134,54 @@
       }
     </mat-card-content>
   </mat-card>
+
+  <!-- Formulario de edición inline -->
+  @if (selectedProduct()) {
+    <mat-card class="edit-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>edit</mat-icon>
+          Editar Producto: {{ selectedProduct()!.name }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="editForm" (ngSubmit)="onUpdate()" class="product-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Precio</mat-label>
+              <input matInput type="number" formControlName="price" min="0" />
+            </mat-form-field>
+          </div>
+
+          <div class="image-row">
+            <div class="image-upload">
+              <span class="file-label">Cambiar foto (opcional)</span>
+              <input type="file" accept="image/*" (change)="onEditFileChange($event)" class="file-input" />
+            </div>
+            @if (editImagePreview()) {
+              <div class="image-preview-wrapper">
+                <img [src]="editImagePreview()" alt="Vista previa" class="preview-img" />
+              </div>
+            }
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
+              <mat-icon>update</mat-icon>
+              Actualizar
+            </button>
+            <button mat-raised-button type="button" (click)="cancelEdit()">
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>

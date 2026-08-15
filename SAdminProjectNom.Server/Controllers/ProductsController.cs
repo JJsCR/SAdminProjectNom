@@ -89,6 +89,38 @@ namespace SAdminProjectNom.Server.Controllers
             });
         }
 
+        public class UpdateProductDto
+        {
+            public string Name { get; set; } = string.Empty;
+            public decimal Price { get; set; }
+            public string? Foto { get; set; }
+        }
+
+        // PUT /api/products/{id}
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] UpdateProductDto dto)
+        {
+            var product = _db.Products.Find(id);
+            if (product == null)
+                return NotFound();
+
+            product.Name = dto.Name;
+            product.Price = dto.Price;
+            product.Foto = dto.Foto;
+
+            _db.SaveChanges();
+
+            return Ok(new ProductDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Foto = product.Foto,
+                IsActive = product.IsActive,
+                CreatedAt = product.CreatedAt
+            });
+        }
+
         // PATCH /api/products/{id}/status
         [HttpPatch("{id}/status")]
         public IActionResult PatchStatus(int id, [FromBody] PatchStatusDto dto)

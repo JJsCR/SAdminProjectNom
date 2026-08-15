@@ -99,6 +99,44 @@ namespace SAdminProjectNom.Server.Controllers
             });
         }
 
+        public class UpdateClientDto
+        {
+            public string Nombre { get; set; } = string.Empty;
+            public string Apellido { get; set; } = string.Empty;
+            public string? Cedula { get; set; }
+            public string Celular { get; set; } = string.Empty;
+            public string? Correo { get; set; }
+        }
+
+        // PUT /api/clients/{id}
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] UpdateClientDto dto)
+        {
+            var client = _db.Clients.Find(id);
+            if (client == null)
+                return NotFound();
+
+            client.Nombre = dto.Nombre;
+            client.Apellido = dto.Apellido;
+            client.Cedula = dto.Cedula;
+            client.Celular = dto.Celular;
+            client.Correo = dto.Correo;
+
+            _db.SaveChanges();
+
+            return Ok(new ClientDto
+            {
+                Id = client.Id,
+                Nombre = client.Nombre,
+                Apellido = client.Apellido,
+                Cedula = client.Cedula,
+                Celular = client.Celular,
+                Correo = client.Correo,
+                Activo = client.Activo,
+                FechaCreacion = client.FechaCreacion
+            });
+        }
+
         // PATCH /api/clients/{id}/status
         [HttpPatch("{id}/status")]
         public IActionResult PatchStatus(int id, [FromBody] PatchStatusDto dto)

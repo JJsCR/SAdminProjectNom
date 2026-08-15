@@ -12,3 +12,9 @@ export interface CreateProductDto {
   price: number;
   foto?: string;
 }
+
+export interface UpdateProductDto {
+  name: string;
+  price: number;
+  foto?: string;
+}
