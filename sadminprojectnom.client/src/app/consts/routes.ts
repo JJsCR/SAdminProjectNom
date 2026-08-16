@@ -100,4 +100,8 @@ export enum routes {
 
   PROJECTS_MANAGEMENT = '/projects',
   PROJECT_DETAIL = '/projects/detail',
+
+  // --- Liquidaciones module ---//
+
+  LIQUIDACIONES_PAGE = '/extra/calendar',
 }

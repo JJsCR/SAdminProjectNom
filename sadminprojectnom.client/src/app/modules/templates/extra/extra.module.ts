@@ -16,7 +16,7 @@ import { SearchResultPageComponent } from './containers/search-result-page/searc
 import { SearchResultItemComponent } from './components/search-result-item/search-result-item.component';
 import {MatSelectModule} from '@angular/material/select';
 import { TimePeriodSelectComponent } from './components/time-period-select/time-period-select.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { TypeItemSelectComponent } from './components/type-item-select/type-item-select.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { ResultFilteringComponent } from './components/result-filtering/result-filtering.component';
@@ -60,6 +60,7 @@ import { BreadcrumbComponent } from '../../../shared/ui-elements';
         MatIconModule,
         MatSelectModule,
         FormsModule,
+        ReactiveFormsModule,
         MatButtonToggleModule,
         MatListModule,
         MatTableModule,
