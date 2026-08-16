@@ -62,7 +62,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
   selectedWorker = signal<Worker | null>(null);
   searchValue = signal('');
   dataSource = new MatTableDataSource<Worker>([]);
-  displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'fechaCreacion', 'estado'];
+  displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'montoHora', 'fechaCreacion', 'estado'];
 
   constructor(
     private fb: FormBuilder,
@@ -75,6 +75,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       cedula: ['', Validators.required],
       fechaNacimiento: [null, Validators.required],
       celular: [''],
+      montoHora: [null, [Validators.required, Validators.min(0)]],
     });
 
     this.editForm = this.fb.group({
@@ -83,6 +84,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       cedula: ['', Validators.required],
       fechaNacimiento: [null, Validators.required],
       celular: [''],
+      montoHora: [null, [Validators.required, Validators.min(0)]],
     });
 
     this.dataSource.filterPredicate = (data: Worker, filter: string) => {
@@ -128,6 +130,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       cedula: this.form.value.cedula,
       fechaNacimiento: new Date(this.form.value.fechaNacimiento).toISOString(),
       celular: this.form.value.celular || undefined,
+      montoHora: this.form.value.montoHora,
     };
 
     this.workersService.create(dto).subscribe({
@@ -174,6 +177,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       cedula: worker.cedula,
       fechaNacimiento: new Date(worker.fechaNacimiento),
       celular: worker.celular || '',
+      montoHora: worker.montoHora,
     });
   }
 
@@ -192,6 +196,7 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       cedula: this.editForm.value.cedula,
       fechaNacimiento: new Date(this.editForm.value.fechaNacimiento).toISOString(),
       celular: this.editForm.value.celular || undefined,
+      montoHora: this.editForm.value.montoHora,
     };
 
     this.workersService.update(worker.trabajadorId, dto).subscribe({

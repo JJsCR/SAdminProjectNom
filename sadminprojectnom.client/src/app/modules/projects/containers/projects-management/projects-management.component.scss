@@ -1,0 +1,101 @@
+.projects-card {
+  margin: 16px;
+}
+
+.card-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 16px;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.card-subtitle {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 8px;
+}
+
+.search-field {
+  width: 250px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.projects-table {
+  width: 100%;
+}
+
+.count-badge {
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.estado-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-pending {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.badge-progress {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge-done {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge-suspended {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.form-card {
+  margin-top: 24px;
+}
+
+.project-form {
+  padding: 16px 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}

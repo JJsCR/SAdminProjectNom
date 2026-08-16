@@ -95,4 +95,9 @@ export enum routes {
   // --- Workers module ---//
 
   WORKERS_PAGE = '/workers',
+
+  // --- Projects module ---//
+
+  PROJECTS_MANAGEMENT = '/projects',
+  PROJECT_DETAIL = '/projects/detail',
 }

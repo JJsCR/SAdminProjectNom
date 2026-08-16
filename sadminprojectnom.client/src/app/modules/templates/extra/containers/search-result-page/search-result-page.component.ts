@@ -2,9 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { routes } from '../../../../../consts';
 import { Observable } from 'rxjs';
 import { CartService, CartItem } from '../../../../../shared/services/cart.service';
-import { QuotesService } from '../../../../../shared/services/quotes.service';
-import { ProjectsService, ProjectDto } from '../../../../../shared/services/projects.service';
-import { Quote } from '../../../../../shared/models/quote.model';
+import { CotizacionesService, CreateCotizacionDto } from '../../../../../shared/services/cotizaciones.service';
+import { ProjectsService, ProjectListDto } from '../../../../../shared/services/projects.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -19,13 +18,14 @@ export class SearchResultPageComponent implements OnInit {
   public subtotal$: Observable<number>;
   public iva$: Observable<number>;
   public total$: Observable<number>;
-  public projects: ProjectDto[] = [];
-  public selectedProjectId: string = '';
-  public generatedQuote: Quote | null = null;
+  public projects: ProjectListDto[] = [];
+  public selectedProjectId: number | null = null;
+  public generatedResult: { cotizacionId: number; facturaId: number; numeroFactura: string } | null = null;
+  public isGenerating = false;
 
   constructor(
     public cartService: CartService,
-    private quotesService: QuotesService,
+    private cotizacionesService: CotizacionesService,
     private projectsService: ProjectsService
   ) {
     this.cartItems$ = this.cartService.items$;
@@ -73,12 +73,33 @@ export class SearchResultPageComponent implements OnInit {
       return;
     }
 
-    const items = (this.cartService as any).cartItems$.value;
-    this.generatedQuote = this.quotesService.generateQuote(items, this.selectedProjectId);
-    this.cartService.clearCart();
+    this.isGenerating = true;
+    const items = (this.cartService as any).cartItems$.value as CartItem[];
+
+    const dto: CreateCotizacionDto = {
+      proyectoId: this.selectedProjectId,
+      items: items.map(item => ({
+        productoId: parseInt(item.productId, 10),
+        cantidad: item.quantity,
+        precioUnitario: item.priceApplied !== null ? item.priceApplied : item.priceBase
+      }))
+    };
+
+    this.cotizacionesService.create(dto).subscribe({
+      next: (result) => {
+        this.generatedResult = result;
+        this.cartService.clearCart();
+        this.isGenerating = false;
+      },
+      error: (err) => {
+        console.error('Error al generar cotización:', err);
+        alert('Error al generar la cotización. Revise la consola para más detalles.');
+        this.isGenerating = false;
+      }
+    });
   }
 
   closeConfirmation(): void {
-    this.generatedQuote = null;
+    this.generatedResult = null;
   }
 }

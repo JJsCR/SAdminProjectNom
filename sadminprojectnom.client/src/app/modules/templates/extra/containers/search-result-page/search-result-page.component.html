@@ -3,34 +3,12 @@
 <h2 class="page-title">Carrito de Compras / Cotización</h2>
 
 <!-- Modal de confirmación -->
-@if (generatedQuote) {
+@if (generatedResult) {
   <div class="quote-confirmation-overlay">
     <mat-card class="quote-confirmation">
-      <h3>✅ Cotización Generada Exitosamente</h3>
-      <p><strong>ID:</strong> {{generatedQuote.id}}</p>
-      <p><strong>Fecha:</strong> {{generatedQuote.date | date:'dd/MM/yyyy HH:mm'}}</p>
-      <p><strong>Proyecto:</strong> {{generatedQuote.projectName}}</p>
-      <hr>
-      <table class="quote-table">
-        <thead>
-          <tr><th>Producto</th><th>Cant.</th><th>Precio Unit.</th><th>Total</th></tr>
-        </thead>
-        <tbody>
-          @for (d of generatedQuote.details; track d.productId) {
-            <tr>
-              <td>{{d.productName}}</td>
-              <td>{{d.quantity}}</td>
-              <td>₡{{d.priceApplied | number}}</td>
-              <td>₡{{d.totalItem | number}}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-      <div class="quote-totals">
-        <p>Subtotal: <strong>₡{{generatedQuote.subtotal | number}}</strong></p>
-        <p>IVA (13%): <strong>₡{{generatedQuote.iva | number}}</strong></p>
-        <p class="grand-total">Total: <strong>₡{{generatedQuote.total | number}}</strong></p>
-      </div>
+      <h3>✅ Cotización y Factura Generadas Exitosamente</h3>
+      <p><strong>Cotización ID:</strong> {{generatedResult.cotizacionId}}</p>
+      <p><strong>Factura Nº:</strong> {{generatedResult.numeroFactura}}</p>
       <button mat-raised-button color="primary" (click)="closeConfirmation()">Cerrar</button>
     </mat-card>
   </div>
@@ -117,13 +95,13 @@
         <mat-label>Seleccionar Proyecto *</mat-label>
         <mat-select [(value)]="selectedProjectId">
           @for (project of projects; track project.id) {
-            <mat-option [value]="project.id">{{project.name}}</mat-option>
+            <mat-option [value]="project.id">{{project.nombre}}</mat-option>
           }
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button color="accent" class="generate-btn" (click)="generateQuote()">
-        GENERAR COTIZACIÓN
+      <button mat-raised-button color="accent" class="generate-btn" (click)="generateQuote()" [disabled]="isGenerating">
+        {{ isGenerating ? 'GENERANDO...' : 'GENERAR COTIZACIÓN' }}
       </button>
     </mat-card>
   </div>

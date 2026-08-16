@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,5 +41,12 @@ namespace SAdminProjectNom.Server.Models
 
         [Column("FechaCreacion")]
         public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
+
+        [ForeignKey("ClienteId")]
+        public Client? Cliente { get; set; }
+
+        public ICollection<ProyectoTrabajador> ProyectoTrabajadores { get; set; } = new List<ProyectoTrabajador>();
+        public ICollection<AbonoProyecto> Abonos { get; set; } = new List<AbonoProyecto>();
+        public ICollection<Cotizacion> Cotizaciones { get; set; } = new List<Cotizacion>();
     }
 }

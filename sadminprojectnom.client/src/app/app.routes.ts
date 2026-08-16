@@ -143,6 +143,14 @@ export const APP_ROUTES: Routes = [
             (m) => m.WORKERS_ROUTES,
           ),
       },
+      {
+        path: 'projects',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./modules/projects/projects.routes').then(
+            (m) => m.PROJECTS_ROUTES,
+          ),
+      },
     ],
   },
   {

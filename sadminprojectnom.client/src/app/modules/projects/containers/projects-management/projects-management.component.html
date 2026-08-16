@@ -1,0 +1,249 @@
+<!-- Formulario Agregar Proyecto (siempre visible) -->
+<mat-card appearance="outlined" class="projects-card">
+  <mat-card-title class="card-title-wrapper">
+    <p class="card-title">Agregar Proyecto</p>
+  </mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="project-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <mat-select formControlName="clienteId">
+            @for (client of clients(); track client.id) {
+              <mat-option [value]="client.id">{{client.nombre}} {{client.apellido}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre del Proyecto</mat-label>
+          <input matInput formControlName="nombre">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Ubicación</mat-label>
+          <input matInput formControlName="ubicacion">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Monto de la Obra (₡)</mat-label>
+          <input matInput type="number" formControlName="montoObra">
+          <span matPrefix>₡&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            @for (estado of estados; track estado) {
+              <mat-option [value]="estado">{{estado}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio">
+          <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicio></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Fin Estimada</mat-label>
+          <input matInput [matDatepicker]="pickerFin" formControlName="fechaFinEstimada">
+          <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFin></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Trabajadores Asignados</mat-label>
+          <mat-select formControlName="trabajadorIds" multiple>
+            @for (worker of workers(); track worker.trabajadorId) {
+              <mat-option [value]="worker.trabajadorId">{{worker.nombre}} {{worker.apellido}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+          Crear Proyecto
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!-- Listado de Proyectos -->
+<mat-card appearance="outlined" class="projects-card">
+  <mat-card-title class="card-title-wrapper">
+    <p class="card-title">Listado de Proyectos <span class="card-subtitle">{{dataSource.data.length}} total</span></p>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Buscar proyecto...">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort class="projects-table">
+
+        <!-- Nombre -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre del Proyecto</th>
+          <td mat-cell *matCellDef="let row">{{row.nombre}}</td>
+        </ng-container>
+
+        <!-- Cliente -->
+        <ng-container matColumnDef="clienteNombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+          <td mat-cell *matCellDef="let row">{{row.clienteNombre}}</td>
+        </ng-container>
+
+        <!-- Ubicación -->
+        <ng-container matColumnDef="ubicacion">
+          <th mat-header-cell *matHeaderCellDef>Ubicación</th>
+          <td mat-cell *matCellDef="let row">{{row.ubicacion}}</td>
+        </ng-container>
+
+        <!-- Monto Obra -->
+        <ng-container matColumnDef="montoObra">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto Obra (₡)</th>
+          <td mat-cell *matCellDef="let row">₡{{row.montoObra | number:'1.2-2'}}</td>
+        </ng-container>
+
+        <!-- N° Trabajadores -->
+        <ng-container matColumnDef="numTrabajadores">
+          <th mat-header-cell *matHeaderCellDef>Trabajadores</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="count-badge">{{row.numTrabajadores}}</span>
+          </td>
+        </ng-container>
+
+        <!-- N° Abonos -->
+        <ng-container matColumnDef="numAbonos">
+          <th mat-header-cell *matHeaderCellDef>Abonos</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="count-badge">{{row.numAbonos}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="estado-badge" [ngClass]="getEstadoClass(row.estado)">{{row.estado}}</span>
+          </td>
+        </ng-container>
+
+        <!-- Acciones -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button color="primary" (click)="viewDetail(row)" matTooltip="Ver detalle">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="editProject(row)" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+<!-- Formulario Editar Proyecto (aparece debajo de la tabla) -->
+@if (isEditing) {
+<mat-card appearance="outlined" class="projects-card">
+  <mat-card-title class="card-title-wrapper">
+    <p class="card-title">Editar Proyecto</p>
+  </mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="editForm" (ngSubmit)="onEditSubmit()" class="project-form">
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <mat-select formControlName="clienteId">
+            @for (client of clients(); track client.id) {
+              <mat-option [value]="client.id">{{client.nombre}} {{client.apellido}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre del Proyecto</mat-label>
+          <input matInput formControlName="nombre">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Ubicación</mat-label>
+          <input matInput formControlName="ubicacion">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Monto de la Obra (₡)</mat-label>
+          <input matInput type="number" formControlName="montoObra">
+          <span matPrefix>₡&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado">
+            @for (estado of estados; track estado) {
+              <mat-option [value]="estado">{{estado}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Inicio</mat-label>
+          <input matInput [matDatepicker]="pickerInicioEdit" formControlName="fechaInicio">
+          <mat-datepicker-toggle matSuffix [for]="pickerInicioEdit"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicioEdit></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha Fin Estimada</mat-label>
+          <input matInput [matDatepicker]="pickerFinEdit" formControlName="fechaFinEstimada">
+          <mat-datepicker-toggle matSuffix [for]="pickerFinEdit"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFinEdit></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Trabajadores Asignados</mat-label>
+          <mat-select formControlName="trabajadorIds" multiple>
+            @for (worker of workers(); track worker.trabajadorId) {
+              <mat-option [value]="worker.trabajadorId">{{worker.nombre}} {{worker.apellido}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="editForm.invalid">
+          Actualizar
+        </button>
+        <button mat-stroked-button type="button" (click)="resetForm()">Cancelar</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+}

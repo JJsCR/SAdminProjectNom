@@ -34,6 +34,10 @@ namespace SAdminProjectNom.Server.Models
         [MaxLength(30)]
         public string? Celular { get; set; }
 
+        [Required]
+        [Column("MontoHora")]
+        public decimal MontoHora { get; set; }
+
         [Column("Activo")]
         public bool Activo { get; set; } = true;
 

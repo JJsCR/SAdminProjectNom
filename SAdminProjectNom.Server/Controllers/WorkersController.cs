@@ -25,6 +25,7 @@ namespace SAdminProjectNom.Server.Controllers
             public string Cedula { get; set; } = string.Empty;
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
+            public decimal MontoHora { get; set; }
             public bool Activo { get; set; }
             public DateTime FechaCreacion { get; set; }
         }
@@ -36,6 +37,7 @@ namespace SAdminProjectNom.Server.Controllers
             public string Cedula { get; set; } = string.Empty;
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
+            public decimal MontoHora { get; set; }
         }
 
         public class UpdateWorkerDto
@@ -45,6 +47,7 @@ namespace SAdminProjectNom.Server.Controllers
             public string Cedula { get; set; } = string.Empty;
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
+            public decimal MontoHora { get; set; }
         }
 
         public class PatchStatusDto
@@ -73,6 +76,7 @@ namespace SAdminProjectNom.Server.Controllers
                     Cedula = w.Cedula,
                     FechaNacimiento = w.FechaNacimiento,
                     Celular = w.Celular,
+                    MontoHora = w.MontoHora,
                     Activo = w.Activo,
                     FechaCreacion = w.FechaCreacion
                 })
@@ -95,6 +99,7 @@ namespace SAdminProjectNom.Server.Controllers
                 Cedula = dto.Cedula,
                 FechaNacimiento = dto.FechaNacimiento,
                 Celular = dto.Celular,
+                MontoHora = dto.MontoHora,
                 Activo = true,
                 FechaCreacion = DateTime.UtcNow
             };
@@ -110,6 +115,7 @@ namespace SAdminProjectNom.Server.Controllers
                 Cedula = worker.Cedula,
                 FechaNacimiento = worker.FechaNacimiento,
                 Celular = worker.Celular,
+                MontoHora = worker.MontoHora,
                 Activo = worker.Activo,
                 FechaCreacion = worker.FechaCreacion
             });
@@ -128,6 +134,7 @@ namespace SAdminProjectNom.Server.Controllers
             worker.Cedula = dto.Cedula;
             worker.FechaNacimiento = dto.FechaNacimiento;
             worker.Celular = dto.Celular;
+            worker.MontoHora = dto.MontoHora;
 
             _db.SaveChanges();
 
@@ -139,6 +146,7 @@ namespace SAdminProjectNom.Server.Controllers
                 Cedula = worker.Cedula,
                 FechaNacimiento = worker.FechaNacimiento,
                 Celular = worker.Celular,
+                MontoHora = worker.MontoHora,
                 Activo = worker.Activo,
                 FechaCreacion = worker.FechaCreacion
             });
