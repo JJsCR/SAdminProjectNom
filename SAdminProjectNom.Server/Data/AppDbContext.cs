@@ -19,6 +19,8 @@ namespace SAdminProjectNom.Server.Data
         public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<DetalleCotizacion> DetallesCotizacion { get; set; }
         public DbSet<Factura> Facturas { get; set; }
+        public DbSet<LiquidacionSemanal> LiquidacionesSemanales { get; set; }
+        public DbSet<DetalleLiquidacionSemanal> DetalleLiquidaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,6 +60,21 @@ namespace SAdminProjectNom.Server.Data
                 .HasOne(f => f.Cotizacion)
                 .WithOne(c => c.Factura)
                 .HasForeignKey<Factura>(f => f.CotizacionId);
+
+            modelBuilder.Entity<LiquidacionSemanal>()
+                .HasOne(l => l.Trabajador)
+                .WithMany()
+                .HasForeignKey(l => l.TrabajadorId);
+
+            modelBuilder.Entity<DetalleLiquidacionSemanal>()
+                .HasOne(d => d.Liquidacion)
+                .WithMany(l => l.Detalles)
+                .HasForeignKey(d => d.LiquidacionId);
+
+            modelBuilder.Entity<DetalleLiquidacionSemanal>()
+                .HasOne(d => d.Proyecto)
+                .WithMany()
+                .HasForeignKey(d => d.ProyectoId);
         }
     }
 }

@@ -2,21 +2,39 @@
 @use "src/app/styles/variables" as *;
 
 .event-wrapper {
-  width: 317px;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
 .title {
   font-size: $fs-regular;
   color: $dark-grey;
+  text-align: center;
+  margin-bottom: 8px;
 }
 
 .subtitle {
   font-size: $fs-small;
   color: $dark-grey;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .form {
   display: block;
+  margin-bottom: 8px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .button {

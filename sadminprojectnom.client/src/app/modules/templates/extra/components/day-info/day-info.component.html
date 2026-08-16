@@ -1,10 +1,115 @@
-<div class="event-wrapper">
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon class="title-icon">receipt_long</mat-icon>
+  Detalle de Liquidación #{{data.liquidacionId}}
+</h2>
 
-  <h3 class="title">{{data.title}}</h3>
-  <div class="date-wrapper">
-    <mat-icon class="icon">calendar_today</mat-icon><p class="date">{{data.start | date:'yyyy-MM-dd'}}</p>
-  </div>
-  <p class="description">{{data.description}}</p>
+<mat-dialog-content class="dialog-content">
 
-  <button mat-raised-button color="primary" (click)="close()">ok</button>
-</div>
+  <!-- Información del Trabajador -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="section-icon worker-icon">person</mat-icon>
+      <mat-card-title>Información del Trabajador</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Nombre</span>
+          <span class="value">{{data.trabajadorNombre}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Cédula</span>
+          <span class="value">{{data.trabajadorCedula}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Tarifa por Hora</span>
+          <span class="value highlight">₡{{data.montoHora | number}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Desglose Financiero -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="section-icon finance-icon">payments</mat-icon>
+      <mat-card-title>Desglose Financiero</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Total Horas</span>
+          <span class="value">{{data.totalHoras}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Total a Pagar</span>
+          <span class="value highlight-green">₡{{data.totalPagar | number}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Estado</span>
+          <span class="value badge" [ngClass]="{
+            'badge-success': data.estado === 'Pagado',
+            'badge-warning': data.estado === 'Pendiente',
+            'badge-danger': data.estado === 'Cancelado'
+          }">{{data.estado}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Método de Pago</span>
+          <span class="value">{{data.metodoPago || 'N/A'}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Número de Referencia</span>
+          <span class="value">{{data.numeroReferencia || 'N/A'}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Información del Proyecto -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="section-icon project-icon">business</mat-icon>
+      <mat-card-title>Información del Proyecto</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Proyecto</span>
+          <span class="value">{{data.proyectoNombre || 'N/A'}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Ubicación</span>
+          <span class="value">{{data.proyectoUbicacion || 'N/A'}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Fechas -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="section-icon date-icon">calendar_today</mat-icon>
+      <mat-card-title>Fechas</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Fecha de Pago</span>
+          <span class="value">{{data.fechaPago}}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Fecha de Creación</span>
+          <span class="value">{{data.fechaCreacion | date:'yyyy-MM-dd HH:mm'}}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">
+    <mat-icon>close</mat-icon>
+    Cerrar
+  </button>
+</mat-dialog-actions>
