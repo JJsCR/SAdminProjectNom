@@ -15,22 +15,24 @@ export interface AppRuntimeConfig {
 }
 
 const buildRuntimeConfig = (): AppRuntimeConfig => {
-  const hostApi = environment.production
-    ? 'https://sing-generator-node.flatlogic.com'
-    : 'http://localhost';
-  const portApi = environment.production ? '' : '8080';
-  const baseURLApi = `${hostApi}${portApi ? `:${portApi}` : ``}`;
+  // El backend (.NET) sirve el frontend Angular desde el mismo origen (misma
+  // URL/puerto), tanto en desarrollo (via proxy.conf.js) como en producción
+  // (wwwroot). Por eso las llamadas a la API usan una ruta relativa vacía en
+  // lugar de apuntar a un host externo.
+  const hostApi = '';
+  const portApi = '';
+  const baseURLApi = '';
 
   return {
     version: '1.2.0',
-    remote: 'https://sing-generator-node.flatlogic.com',
+    remote: '',
     isBackend: environment.backend,
     hostApi,
     portApi,
     baseURLApi,
     auth: {
-      email: 'jArmandoGO',
-      password: '8822',
+      email: '',
+      password: '',
     },
   };
 };

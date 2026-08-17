@@ -27,9 +27,10 @@ export class LoginFormComponent implements OnInit {
   public password: string;
 
   constructor(@Inject(APP_RUNTIME_CONFIG) appConfig: AppRuntimeConfig) {
-    // Use username/password defaults requested
-    this.email = appConfig.auth.email || 'jArmandoGO';
-    this.password = appConfig.auth.password || '8822';
+    // El formulario de login siempre debe iniciar vacío: el usuario debe
+    // escribir sus credenciales manualmente en cada inicio de sesión.
+    this.email = appConfig.auth.email;
+    this.password = appConfig.auth.password;
   }
 
   public ngOnInit(): void {
