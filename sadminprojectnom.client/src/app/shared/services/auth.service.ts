@@ -325,7 +325,7 @@ export class AuthService {
   public receiveLogin(): void {
     this.isFetching = false;
     this.errorMessage = '';
-    this.router.navigate([this.ROUTES.DASHBOARD]);
+    this.router.navigate([this.ROUTES.PROJECTS_MANAGEMENT]);
   }
 
   public requestLogin(): void {

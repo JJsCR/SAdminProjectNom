@@ -9,8 +9,4 @@ import { MatIconModule } from '@angular/material/icon';
     standalone: true,
     imports: [MatButtonModule, MatIconModule]
 })
-export class FooterComponent {
-  public flatlogic: string = 'https://flatlogic.com/';
-  public flatlogicAbout: string = 'https://flatlogic.com/about';
-  public flatlogicBlog: string = 'https://flatlogic.com/blog';
-}
+export class FooterComponent {}

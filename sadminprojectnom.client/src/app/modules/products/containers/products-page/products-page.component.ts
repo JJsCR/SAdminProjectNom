@@ -3,7 +3,7 @@ import {
   OnInit,
   signal,
   ViewChild,
-  AfterViewInit,
+  ElementRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -23,6 +23,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { ProductsService } from '../../services/products.service';
 import { Product, CreateProductDto, UpdateProductDto } from '../../models/product.model';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 
 const AVATAR_COLORS = [
   '#f44336', '#e91e63', '#9c27b0', '#673ab7',
@@ -45,12 +46,23 @@ const AVATAR_COLORS = [
     MatIconModule,
     MatSnackBarModule,
     MatChipsModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './products-page.component.html',
   styleUrls: ['./products-page.component.scss'],
 })
-export class ProductsPageComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class ProductsPageComponent implements OnInit {
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator) {
+      this.dataSource.paginator = paginator;
+    }
+  }
+  @ViewChild('editCard', { read: ElementRef }) editCardRef!: ElementRef;
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Productos' },
+  ];
 
   form: FormGroup;
   editForm: FormGroup;
@@ -83,10 +95,6 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadProducts();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
   }
 
   loadProducts(): void {
@@ -179,6 +187,9 @@ export class ProductsPageComponent implements OnInit, AfterViewInit {
       name: product.name,
       price: product.price,
     });
+    setTimeout(() => {
+      this.editCardRef?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   }
 
   cancelEdit(): void {

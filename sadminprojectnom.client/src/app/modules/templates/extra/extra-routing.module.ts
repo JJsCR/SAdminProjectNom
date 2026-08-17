@@ -14,7 +14,7 @@ import {
 export const EXTRA_ROUTES: Routes = [
   {
     path: '',
-    redirectTo: 'calendar',
+    component: CalendarPageComponent,
     pathMatch: 'full'
   },
   {

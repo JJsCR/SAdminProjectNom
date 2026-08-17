@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { routes } from '../../../../../consts';
+import { BreadcrumbItem } from '../../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 import { Observable } from 'rxjs';
 import { CartService, CartItem } from '../../../../../shared/services/cart.service';
 import { CotizacionesService, CreateCotizacionDto } from '../../../../../shared/services/cotizaciones.service';
@@ -22,6 +23,10 @@ export class SearchResultPageComponent implements OnInit {
   public selectedProjectId: number | null = null;
   public generatedResult: { cotizacionId: number; facturaId: number; numeroFactura: string } | null = null;
   public isGenerating = false;
+  public breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Cotizaciones' },
+  ];
 
   constructor(
     public cartService: CartService,

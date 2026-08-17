@@ -4,6 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   signal,
+  ElementRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -29,6 +30,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ProjectsService, ProjectListDto, CreateProjectDto } from '../../../../shared/services/projects.service';
 import { HttpClient } from '@angular/common/http';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 
 interface ClientOption {
   id: number;
@@ -62,13 +64,24 @@ interface WorkerOption {
     MatBadgeModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './projects-management.component.html',
   styleUrls: ['./projects-management.component.scss'],
 })
 export class ProjectsManagementComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator) {
+      this.dataSource.paginator = paginator;
+    }
+  }
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('editProjectCard', { read: ElementRef }) editProjectCardRef!: ElementRef;
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Proyectos' },
+  ];
 
   displayedColumns: string[] = [
     'nombre', 'clienteNombre', 'ubicacion', 'montoObra',
@@ -120,7 +133,6 @@ export class ProjectsManagementComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
@@ -211,11 +223,14 @@ export class ProjectsManagementComponent implements OnInit, AfterViewInit {
         fechaFinEstimada: detail.fechaFinEstimada ? new Date(detail.fechaFinEstimada) : null,
         trabajadorIds: detail.trabajadores.map(t => t.trabajadorId),
       });
+      setTimeout(() => {
+        this.editProjectCardRef?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     });
   }
 
   viewDetail(project: ProjectListDto): void {
-    this.router.navigate(['/projects/detail', project.id]);
+    this.router.navigate(['/proyectos/detail', project.id]);
   }
 
   resetForm(): void {

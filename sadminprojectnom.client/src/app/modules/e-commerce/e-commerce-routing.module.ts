@@ -12,7 +12,7 @@ import {
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'management',
+    component: ProductsPageComponent,
     pathMatch: 'full'
   },
   {

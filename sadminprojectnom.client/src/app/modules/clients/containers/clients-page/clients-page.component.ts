@@ -3,7 +3,7 @@ import {
   OnInit,
   signal,
   ViewChild,
-  AfterViewInit,
+  ElementRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -23,6 +23,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { ClientsService } from '../../services/clients.service';
 import { Client, CreateClientDto, UpdateClientDto } from '../../models/client.model';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 
 const AVATAR_COLORS = [
   '#f44336', '#e91e63', '#9c27b0', '#673ab7',
@@ -45,12 +46,23 @@ const AVATAR_COLORS = [
     MatIconModule,
     MatSnackBarModule,
     MatChipsModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './clients-page.component.html',
   styleUrls: ['./clients-page.component.scss'],
 })
-export class ClientsPageComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class ClientsPageComponent implements OnInit {
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator) {
+      this.dataSource.paginator = paginator;
+    }
+  }
+  @ViewChild('editCard', { read: ElementRef }) editCardRef!: ElementRef;
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Clientes' },
+  ];
 
   form: FormGroup;
   editForm: FormGroup;
@@ -88,10 +100,6 @@ export class ClientsPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadClients();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
   }
 
   loadClients(): void {
@@ -169,6 +177,9 @@ export class ClientsPageComponent implements OnInit, AfterViewInit {
       celular: client.celular,
       correo: client.correo || '',
     });
+    setTimeout(() => {
+      this.editCardRef?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   }
 
   cancelEdit(): void {

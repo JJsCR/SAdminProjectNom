@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { routes } from '../../../../consts';
+import { BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 import { ProductsService } from '../../services';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -14,6 +15,10 @@ import { ProductCard } from '../../models';
 })
 export class ProductsPageComponent implements OnInit {
   public routes: typeof routes = routes;
+  public breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Cotizaciones' },
+  ];
   public filteredProducts$: Observable<ProductCard[]>;
   private searchTerm$ = new BehaviorSubject<string>('');
   private allProducts$: Observable<ProductCard[]>;

@@ -1,5 +1,5 @@
 export enum routes {
-  DASHBOARD = '/dashboard',
+  DASHBOARD = '/inicio',
   PROFILE = '/user/profile',
   CHANGE_PASSWORD = '/app/change-password',
   LOGIN = '/login',
@@ -84,24 +84,28 @@ export enum routes {
   SEARCH_RESULT = '/extra/search-result',
   TIME_LINE = '/extra/time-line',
 
+  // --- Cotizaciones module ---//
+
+  COTIZACIONES_PAGE = '/cotizaciones',
+
   // --- Products module ---//
 
-  PRODUCTS_PAGE = '/products',
+  PRODUCTS_PAGE = '/productos',
 
   // --- Clients module ---//
 
-  CLIENTS_PAGE = '/clients',
+  CLIENTS_PAGE = '/clientes',
 
   // --- Workers module ---//
 
-  WORKERS_PAGE = '/workers',
+  WORKERS_PAGE = '/trabajadores',
 
   // --- Projects module ---//
 
-  PROJECTS_MANAGEMENT = '/projects',
-  PROJECT_DETAIL = '/projects/detail',
+  PROJECTS_MANAGEMENT = '/proyectos',
+  PROJECT_DETAIL = '/proyectos/detail',
 
   // --- Liquidaciones module ---//
 
-  LIQUIDACIONES_PAGE = '/extra/calendar',
+  LIQUIDACIONES_PAGE = '/liquidaciones',
 }

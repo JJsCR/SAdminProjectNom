@@ -1,3 +1,5 @@
+<app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+
 <div class="products-container">
   <!-- Bloque Superior: Formulario de Creaci&#243;n -->
   <mat-card class="form-card">
@@ -120,14 +122,14 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="5" showFirstLastButtons></mat-paginator>
       }
     </mat-card-content>
   </mat-card>
 
   <!-- Formulario de edici&#243;n inline -->
   @if (selectedProduct()) {
-    <mat-card class="edit-card">
+    <mat-card class="edit-card" #editCard>
       <mat-card-header>
         <mat-card-title>
           <mat-icon>edit</mat-icon>

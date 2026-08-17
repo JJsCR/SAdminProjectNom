@@ -3,7 +3,7 @@ import {
   OnInit,
   signal,
   ViewChild,
-  AfterViewInit,
+  ElementRef,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -25,6 +25,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WorkersService } from '../../services/workers.service';
 import { Worker, CreateWorkerDto, UpdateWorkerDto } from '../../models/worker.model';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 
 const AVATAR_COLORS = [
   '#f44336', '#e91e63', '#9c27b0', '#673ab7',
@@ -49,12 +50,23 @@ const AVATAR_COLORS = [
     MatChipsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './workers-page.component.html',
   styleUrls: ['./workers-page.component.scss'],
 })
-export class WorkersPageComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+export class WorkersPageComponent implements OnInit {
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator) {
+      this.dataSource.paginator = paginator;
+    }
+  }
+  @ViewChild('editCard', { read: ElementRef }) editCardRef!: ElementRef;
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Trabajadores' },
+  ];
 
   form: FormGroup;
   editForm: FormGroup;
@@ -95,10 +107,6 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadWorkers();
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
   }
 
   loadWorkers(): void {
@@ -179,6 +187,9 @@ export class WorkersPageComponent implements OnInit, AfterViewInit {
       celular: worker.celular || '',
       montoHora: worker.montoHora,
     });
+    setTimeout(() => {
+      this.editCardRef?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   }
 
   cancelEdit(): void {

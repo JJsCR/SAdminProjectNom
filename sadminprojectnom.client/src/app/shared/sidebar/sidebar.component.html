@@ -1,15 +1,61 @@
 <mat-list class="sidebar">
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PROFILE}}" routerLinkActive="active">
-    <div>
-      <mat-icon>account_circle</mat-icon>
-      <p>Profile</p>
-    </div>
-  </div>
+  <p class="sidebar-title">Módulos</p>
 
   <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.DASHBOARD}}" routerLinkActive="active">
     <div>
       <mat-icon>home</mat-icon>
-      <p>Dashboard</p>
+      <p>Inicio</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PROJECTS_MANAGEMENT}}" routerLinkActive="active">
+    <div>
+      <mat-icon>construction</mat-icon>
+      <p>Proyectos</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.CLIENTS_PAGE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>people</mat-icon>
+      <p>Clientes</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.COTIZACIONES_PAGE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>request_quote</mat-icon>
+      <p>Cotizaciones</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PRODUCTS_PAGE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>inventory_2</mat-icon>
+      <p>Productos</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.LIQUIDACIONES_PAGE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>payments</mat-icon>
+      <p>Liquidaciones</p>
+    </div>
+  </div>
+
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.WORKERS_PAGE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>engineering</mat-icon>
+      <p>Trabajadores</p>
+    </div>
+  </div>
+</mat-list>
+
+<mat-list class="sidebar">
+  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PROFILE}}" routerLinkActive="active">
+    <div>
+      <mat-icon>account_circle</mat-icon>
+      <p>Profile</p>
     </div>
   </div>
 
@@ -216,129 +262,4 @@
   </mat-tree>
 </mat-list>
 
-<mat-list class="sidebar">
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PRODUCTS_PAGE}}" routerLinkActive="active">
-    <div>
-      <mat-icon>inventory_2</mat-icon>
-      <p>Productos</p>
-    </div>
-  </div>
-
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.CLIENTS_PAGE}}" routerLinkActive="active">
-    <div>
-      <mat-icon>people</mat-icon>
-      <p>Clientes</p>
-    </div>
-  </div>
-
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.WORKERS_PAGE}}" routerLinkActive="active">
-    <div>
-      <mat-icon>engineering</mat-icon>
-      <p>Trabajadores</p>
-    </div>
-  </div>
-
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PRODUCTS}}" routerLinkActive="active">
-    <div>
-      <mat-icon>request_quote</mat-icon>
-      <p>Cotizaciones</p>
-    </div>
-  </div>
-
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.PROJECTS_MANAGEMENT}}" routerLinkActive="active">
-    <div>
-      <mat-icon>construction</mat-icon>
-      <p>Proyectos</p>
-    </div>
-  </div>
-
-  <div class="mat-tree-item sidebar-top-item" routerLink="{{routes.LIQUIDACIONES_PAGE}}" routerLinkActive="active">
-    <div>
-      <mat-icon>payments</mat-icon>
-      <p>Liquidaciones</p>
-    </div>
-  </div>
-</mat-list>
-
-<mat-list class="sidebar">
-  <p class="sidebar-title">Help</p>
-  <a class="mat-tree-item sidebar-top-item help-link" href="https://flatlogic.com/templates" target="_blank" rel="noopener noreferrer">
-    <div>
-      <mat-icon>library_books</mat-icon>
-      <p>Library</p>
-    </div>
-  </a>
-  <a class="mat-tree-item sidebar-top-item help-link" href="https://flatlogic.com/forum/" target="_blank" rel="noopener noreferrer">
-    <div>
-      <mat-icon>question_answer</mat-icon>
-      <p>Support</p>
-    </div>
-  </a>
-  <a class="mat-tree-item sidebar-top-item help-link" href="https://flatlogic.com/forum" target="_blank" rel="noopener noreferrer">
-    <div>
-      <mat-icon>help_outline</mat-icon>
-      <p>FAQ</p>
-    </div>
-  </a>
-</mat-list>
-
-<mat-list class="sidebar">
-  <p class="sidebar-title">Projects</p>
-
-  <div class="mat-tree-item sidebar-top-item project-item">
-    <div>
-      <div class="project-circle project-circle_yellow"></div>
-      <p>My resend</p>
-    </div>
-  </div>
-  <div class="mat-tree-item sidebar-top-item project-item">
-    <div>
-      <div class="project-circle project-circle_blue"></div>
-      <p>Starred</p>
-    </div>
-  </div>
-  <div class="mat-tree-item sidebar-top-item project-item">
-    <div>
-      <div class="project-circle project-circle_pink"></div>
-      <p>Background</p>
-    </div>
-  </div>
-</mat-list>
-
-<mat-list class="sidebar">
-  <div class="add-section-wrapper" [matMenuTriggerFor]="newSection">
-    <div class="add-icon-wrapper">
-      <mat-icon class="add-icon">add</mat-icon>
-    </div>
-    <p class="add-section-title">Add section</p>
-  </div>
-
-  <mat-menu #newSection="matMenu" [hasBackdrop]="false" class="add-section-menu-panel">
-    <div class="add-section-menu">
-      <h3 class="menu-title">Add section</h3>
-
-      <mat-form-field (click)="stopPropagation($event)" class="form-field">
-        <input matInput placeholder="Section name">
-      </mat-form-field>
-
-      <div class="menu-buttons-wrapper">
-        <button mat-flat-button color="warn" class="menu-button">Add</button>
-        <button mat-flat-button color="primary" class="menu-cancel-button">Cancel</button>
-      </div>
-    </div>
-  </mat-menu>
-</mat-list>
-
 <div class="space"></div>
-
-<mat-list class="sidebar">
-  <mat-list-item>
-    <div class="chat-section-wrapper" (click)="openChat()">
-      <div class="chat-icon-wrapper">
-        <mat-icon class="chat-icon">chat</mat-icon>
-      </div>
-
-      <p class="chat-section-title">Chat</p>
-    </div>
-  </mat-list-item>
-</mat-list>

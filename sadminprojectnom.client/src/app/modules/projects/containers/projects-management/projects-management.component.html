@@ -1,3 +1,5 @@
+<app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+
 <!-- Formulario Agregar Proyecto (siempre visible) -->
 <mat-card appearance="outlined" class="projects-card">
   <mat-card-title class="card-title-wrapper">
@@ -160,13 +162,13 @@
       </table>
     </div>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [pageSize]="5" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>
 
 <!-- Formulario Editar Proyecto (aparece debajo de la tabla) -->
 @if (isEditing) {
-<mat-card appearance="outlined" class="projects-card">
+<mat-card appearance="outlined" class="projects-card" #editProjectCard>
   <mat-card-title class="card-title-wrapper">
     <p class="card-title">Editar Proyecto</p>
   </mat-card-title>

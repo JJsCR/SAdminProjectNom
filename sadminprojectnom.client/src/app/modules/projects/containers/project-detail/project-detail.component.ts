@@ -28,6 +28,7 @@ import {
   CreateAbonoDto,
 } from '../../../../shared/services/projects.service';
 import { CotizacionesService, CotizacionDetailDto } from '../../../../shared/services/cotizaciones.service';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-project-detail',
@@ -49,6 +50,7 @@ import { CotizacionesService, CotizacionDetailDto } from '../../../../shared/ser
     MatNativeDateModule,
     MatSnackBarModule,
     MatDialogModule,
+    BreadcrumbComponent,
   ],
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss'],
@@ -59,6 +61,12 @@ export class ProjectDetailComponent implements OnInit {
   showAbonoForm = false;
   abonoForm!: FormGroup;
   metodosPago = ['Efectivo', 'Transferencia', 'Sinpe Móvil', 'Cheque', 'Tarjeta'];
+
+  breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Proyectos', route: '/proyectos' },
+    { label: 'Detalle de Proyecto' },
+  ];
 
   constructor(
     private route: ActivatedRoute,

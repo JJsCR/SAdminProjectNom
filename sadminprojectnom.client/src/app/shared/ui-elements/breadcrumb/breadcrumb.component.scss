@@ -35,6 +35,16 @@
   align-items: center;
 }
 
+a.link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .icon {
   display: inline-flex;
   align-items: center;

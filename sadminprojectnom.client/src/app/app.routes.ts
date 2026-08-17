@@ -27,7 +27,7 @@ export const APP_ROUTES: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: 'dashboard',
+        path: 'inicio',
         pathMatch: 'full',
         canActivate: [authGuard],
         loadChildren: () =>
@@ -120,7 +120,7 @@ export const APP_ROUTES: Routes = [
           import('./modules/pages/pages.routes').then((m) => m.PAGES_ROUTES),
       },
       {
-        path: 'products',
+        path: 'productos',
         canActivate: [authGuard],
         loadChildren: () =>
           import('./modules/products/products.routes').then(
@@ -128,7 +128,7 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
-        path: 'clients',
+        path: 'clientes',
         canActivate: [authGuard],
         loadChildren: () =>
           import('./modules/clients/clients.routes').then(
@@ -136,7 +136,7 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
-        path: 'workers',
+        path: 'trabajadores',
         canActivate: [authGuard],
         loadChildren: () =>
           import('./modules/workers/workers.routes').then(
@@ -144,11 +144,27 @@ export const APP_ROUTES: Routes = [
           ),
       },
       {
-        path: 'projects',
+        path: 'proyectos',
         canActivate: [authGuard],
         loadChildren: () =>
           import('./modules/projects/projects.routes').then(
             (m) => m.PROJECTS_ROUTES,
+          ),
+      },
+      {
+        path: 'cotizaciones',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./modules/e-commerce/e-commerce.module').then(
+            (m) => m.ECommerceModule,
+          ),
+      },
+      {
+        path: 'liquidaciones',
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./modules/templates/extra/extra.module').then(
+            (m) => m.ExtraModule,
           ),
       },
     ],

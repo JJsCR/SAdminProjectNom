@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BreadcrumbItem } from '../../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { colors, routes } from '../../../../../consts';
 import { Calendar, CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
@@ -34,6 +35,10 @@ export class CalendarPageComponent implements OnInit, AfterViewInit {
   public colors: typeof colors = colors;
   public calendarOptions: CalendarOptions = {};
   public events: any[] = [];
+  public breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'Inicio', route: '/inicio' },
+    { label: 'Liquidaciones' },
+  ];
 
   private workers: any[] = [];
   private projects: any[] = [];
