@@ -17,10 +17,10 @@ export class UsersService {
   private readonly mockUsersSeed: Users[] = [
     {
       id: '1',
-      firstName: 'Jane',
+      name: 'Jane',
       lastName: 'Hew',
       phoneNumber: '+1 (555) 010-1001',
-      email: 'jane.hew@flatlogic.com',
+      username: 'jane.hew@flatlogic.com',
       role: 'admin',
       disabled: false,
       password: '',
@@ -36,10 +36,10 @@ export class UsersService {
     },
     {
       id: '2',
-      firstName: 'Alex',
+      name: 'Alex',
       lastName: 'Pittman',
       phoneNumber: '+1 (555) 010-1002',
-      email: 'alex.pittman@flatlogic.com',
+      username: 'alex.pittman@flatlogic.com',
       role: 'admin',
       disabled: false,
       password: '',
@@ -55,10 +55,10 @@ export class UsersService {
     },
     {
       id: '3',
-      firstName: 'Sophia',
+      name: 'Sophia',
       lastName: 'Fernandez',
       phoneNumber: '+1 (555) 010-1003',
-      email: 'sophia.fernandez@flatlogic.com',
+      username: 'sophia.fernandez@flatlogic.com',
       role: 'user',
       disabled: false,
       password: '',
@@ -74,10 +74,10 @@ export class UsersService {
     },
     {
       id: '4',
-      firstName: 'Bob',
+      name: 'Bob',
       lastName: 'Nilson',
       phoneNumber: '+1 (555) 010-1004',
-      email: 'bob.nilson@flatlogic.com',
+      username: 'bob.nilson@flatlogic.com',
       role: 'user',
       disabled: true,
       password: '',
@@ -93,10 +93,10 @@ export class UsersService {
     },
     {
       id: '5',
-      firstName: 'Jessica',
+      name: 'Jessica',
       lastName: 'Nilson',
       phoneNumber: '+1 (555) 010-1005',
-      email: 'jessica.nilson@flatlogic.com',
+      username: 'jessica.nilson@flatlogic.com',
       role: 'user',
       disabled: false,
       password: '',
@@ -147,18 +147,18 @@ export class UsersService {
       const normalizedQuery = (query || '').toLowerCase().trim();
       const options = this.getMockUsers()
         .filter((user) => {
-          const fullName = `${user.firstName || ''} ${user.lastName || ''}`
+          const fullName = `${user.name || ''} ${user.lastName || ''}`
             .trim()
             .toLowerCase();
           return (
             fullName.includes(normalizedQuery) ||
-            (user.email || '').toLowerCase().includes(normalizedQuery)
+            (user.username || '').toLowerCase().includes(normalizedQuery)
           );
         })
         .slice(0, limit)
         .map((user) => ({
           id: user.id,
-          label: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          label: `${user.name || ''} ${user.lastName || ''}`.trim(),
         }));
 
       return of(options);
@@ -195,9 +195,9 @@ export class UsersService {
     }
 
     // Map client form to backend CreateUserDto
-    const firstName = (data.firstName || '').toString();
+    const firstName = (data.name || '').toString();
     const lastName = (data.lastName || '').toString();
-    const nombreUsuario = (data.firstName || '') + (data.lastName ? (data.lastName as string) : '');
+    const nombreUsuario = (data.name || '') + (data.lastName ? (data.lastName as string) : '');
     const payload = {
       FirstName: firstName,
       LastName: lastName,
@@ -224,7 +224,7 @@ export class UsersService {
 
     // Map client form to backend UpdateUserDto
     const payload: any = {};
-    if (data.firstName !== undefined) payload.FirstName = data.firstName;
+    if (data.name !== undefined) payload.FirstName = data.name;
     if (data.lastName !== undefined) payload.LastName = data.lastName;
     if ((data as any).phoneNumber !== undefined) payload.Password = (data as any).phoneNumber;
     if ((data as any).password !== undefined) payload.Password = (data as any).password;
@@ -273,10 +273,10 @@ export class UsersService {
   private normalizeUser(data: Partial<Users>): Users {
     return {
       id: data?.id || '',
-      firstName: data?.firstName || '',
+      name: data?.name || '',
       lastName: data?.lastName || '',
       phoneNumber: data?.phoneNumber || '',
-      email: data?.email || '',
+      username: data?.username || '',
       role: data?.role || 'user',
       disabled: Boolean(data?.disabled),
       password: data?.password || '',

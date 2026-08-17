@@ -18,18 +18,18 @@
           }
           </button>
           <h6 class="header__title-text">Sistema Administrativo</h6>
+          <button mat-icon-button (click)="goToCart()" class="cart-btn">
+            <mat-icon
+              matBadge="{{(cartCount$ | async) || 0}}"
+              matBadgeColor="warn"
+              matBadgeSize="small"
+              matBadgePosition="above after"
+              [matBadgeHidden]="(cartCount$ | async) === 0"
+            >shopping_cart</mat-icon>
+          </button>
         </div>
 
       <div class="header-toolbar">
-        <button mat-icon-button (click)="goToCart()" class="cart-btn">
-          <mat-icon
-            matBadge="{{(cartCount$ | async) || 0}}"
-            matBadgeColor="warn"
-            matBadgeSize="small"
-            matBadgePosition="above after"
-            [matBadgeHidden]="(cartCount$ | async) === 0"
-          >shopping_cart</mat-icon>
-        </button>
         <app-user
           [user]="user$ | async"
           (signOut)="signOut()"

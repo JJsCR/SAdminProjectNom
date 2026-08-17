@@ -45,14 +45,14 @@
         >
         <!-- First Name Column -->
 
-        <ng-container matColumnDef="firstName">
+        <ng-container matColumnDef="name">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             mat-sort-header
             >
-            First Name
+            Nombre
           </th>
           <td
             mat-cell
@@ -60,7 +60,7 @@
             class="table-body"
             (click)="edit(row)"
             >
-            {{ row.firstName }}
+            {{ row.name }}
           </td>
         </ng-container>
 
@@ -108,14 +108,14 @@
 
         <!-- E-Mail Column -->
 
-        <ng-container matColumnDef="email">
+        <ng-container matColumnDef="username">
           <th
             mat-header-cell
             *matHeaderCellDef
             class="table-header"
             mat-sort-header
             >
-            E-Mail
+            Usuario
           </th>
           <td
             mat-cell
@@ -123,7 +123,7 @@
             class="table-body"
             (click)="edit(row)"
             >
-            {{ row.email }}
+            {{ row.username }}
           </td>
         </ng-container>
 

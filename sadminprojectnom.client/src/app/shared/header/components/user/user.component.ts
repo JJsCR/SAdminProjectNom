@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Users } from '../../../models/users.model';
 
 import { routes } from '../../../../consts';
@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
     standalone: true,
     imports: [MatButtonModule, MatIconModule, MatMenuModule, MatRadioModule, MatSlideToggleModule, RouterModule]
 })
-export class UserComponent {
+export class UserComponent implements OnInit {
   @Input() user: Users;
   @Output() signOut: EventEmitter<void> = new EventEmitter<void>();
   @Output() themeOnBlue: EventEmitter<void> = new EventEmitter<void>();
@@ -29,6 +29,23 @@ export class UserComponent {
   public isPinkTheme: boolean = false;
   public isGreenTheme: boolean = true;
   public isDarkMode: boolean = false;
+  public userName: string = '';
+  public userInitial: string = 'P';
+
+  ngOnInit(): void {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      let rawName = parsed.name || parsed.username || '';
+      try {
+        rawName = decodeURIComponent(escape(rawName));
+      } catch (e) {
+        // already valid UTF-8
+      }
+      this.userName = rawName;
+      this.userInitial = this.userName ? this.userName[0].toUpperCase() : 'P';
+    }
+  }
 
   public signOutEmit(): void {
     this.signOut.emit();
@@ -61,6 +78,6 @@ export class UserComponent {
   }
 
   firstUserLetter() {
-    return (this.user?.firstName || this.user?.email || 'P')[0].toUpperCase();
+    return this.userInitial;
   }
 }

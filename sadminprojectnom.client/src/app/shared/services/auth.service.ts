@@ -145,10 +145,12 @@ export class AuthService {
 
     return {
       id: typeof source['id'] === 'string' ? source['id'] : '',
-      firstName: typeof source['firstName'] === 'string' ? source['firstName'] : '',
+      name: typeof source['name'] === 'string' ? source['name']
+        : typeof source['firstName'] === 'string' ? source['firstName'] : '',
       lastName: typeof source['lastName'] === 'string' ? source['lastName'] : '',
       phoneNumber: typeof source['phoneNumber'] === 'string' ? source['phoneNumber'] : '',
-      email: typeof source['email'] === 'string' ? source['email'] : '',
+      username: typeof source['username'] === 'string' ? source['username']
+        : typeof source['email'] === 'string' ? source['email'] : '',
       role: typeof source['role'] === 'string' ? source['role'] : 'user',
       disabled: Boolean(source['disabled']),
       password: typeof source['password'] === 'string' ? source['password'] : '',
@@ -295,14 +297,14 @@ export class AuthService {
         // Extract user info from JWT claims
         user = {
           id: payload['id'] || '',
-          firstName: payload['name'] || payload['sub'] || '',
-          email: payload['sub'] || '',
+          name: payload['name'] || payload['sub'] || '',
+          username: payload['sub'] || '',
         };
       } else {
         user = {};
       }
     } else {
-      user = { email: this.config.auth.email };
+      user = { name: this.config.auth.email, username: this.config.auth.email };
     }
 
     localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);

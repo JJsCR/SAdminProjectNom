@@ -27,10 +27,10 @@ export class UsersListComponent implements OnInit {
   selectedId: string;
   public routes: typeof routes = routes;
   public displayedColumns: string[] = [
-    'firstName',
+    'name',
     'lastName',
     'phoneNumber',
-    'email',
+    'username',
     'role',
     'disabled',
     'avatar',
@@ -40,10 +40,10 @@ export class UsersListComponent implements OnInit {
   config: FilterConfig[] = [];
   showFilters = false;
   filters: FilterItems[] = [
-    { label: 'First Name', title: 'firstName' },
+    { label: 'Nombre', title: 'name' },
     { label: 'Last Name', title: 'lastName' },
     { label: 'Phone Number', title: 'phoneNumber' },
-    { label: 'E-Mail', title: 'email' },
+    { label: 'Usuario', title: 'username' },
   ];
 
   constructor(

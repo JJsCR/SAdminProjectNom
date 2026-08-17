@@ -27,10 +27,10 @@ type AvatarItem = {
 
 type ProfileFormControls = {
   id: FormControl<string>;
-  firstName: FormControl<string>;
+  name: FormControl<string>;
   lastName: FormControl<string>;
   phoneNumber: FormControl<string>;
-  email: FormControl<string>;
+  username: FormControl<string>;
   role: FormControl<string>;
   disabled: FormControl<boolean>;
   avatar: FormControl<AvatarItem[]>;
@@ -38,10 +38,10 @@ type ProfileFormControls = {
 
 type ProfileFormValue = {
   id: string;
-  firstName: string;
+  name: string;
   lastName: string;
   phoneNumber: string;
-  email: string;
+  username: string;
   role: string;
   disabled: boolean;
   avatar: AvatarItem[];
@@ -78,10 +78,10 @@ export class ProfileComponent {
   ) {
     this.form = new FormGroup<ProfileFormControls>({
       id: new FormControl('', { nonNullable: true }),
-      firstName: new FormControl('', { nonNullable: true }),
+      name: new FormControl('', { nonNullable: true }),
       lastName: new FormControl('', { nonNullable: true }),
       phoneNumber: new FormControl('', { nonNullable: true }),
-      email: new FormControl({ value: '', disabled: true }, { nonNullable: true }),
+      username: new FormControl({ value: '', disabled: true }, { nonNullable: true }),
       role: new FormControl('user', { nonNullable: true }),
       disabled: new FormControl(false, { nonNullable: true }),
       avatar: new FormControl<AvatarItem[]>([], { nonNullable: true }),
@@ -126,10 +126,10 @@ export class ProfileComponent {
       const avatar = Array.isArray(res?.avatar) ? res.avatar : [];
       this.form.patchValue({
         id: res?.id ?? '',
-        firstName: res?.firstName ?? '',
+        name: res?.name ?? '',
         lastName: res?.lastName ?? '',
         phoneNumber: res?.phoneNumber ?? '',
-        email: res?.email ?? '',
+        username: res?.username ?? '',
         role: res?.role ?? 'user',
         disabled: Boolean(res?.disabled),
       });

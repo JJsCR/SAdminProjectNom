@@ -6,13 +6,13 @@ export interface UserAvatarItem {
 export class Users {
   id: string;
 
-  firstName: string;
+  name: string;
 
   lastName: string;
 
   phoneNumber: string;
 
-  email: string;
+  username: string;
 
   role: string;
 

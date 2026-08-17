@@ -16,10 +16,10 @@ type AvatarItem = {
 };
 
 type UsersCreateFormControls = {
-  firstName: FormControl<string>;
+  name: FormControl<string>;
   lastName: FormControl<string>;
   phoneNumber: FormControl<string>;
-  email: FormControl<string>;
+  username: FormControl<string>;
   role: FormControl<string>;
   disabled: FormControl<boolean>;
   avatar: FormControl<AvatarItem[]>;
@@ -43,10 +43,10 @@ export class UsersCreateComponent implements OnInit {
     private usersService: UsersService,
   ) {
     this.form = new FormGroup<UsersCreateFormControls>({
-      firstName: new FormControl('', { nonNullable: true }),
+      name: new FormControl('', { nonNullable: true }),
       lastName: new FormControl('', { nonNullable: true }),
       phoneNumber: new FormControl('', { nonNullable: true }),
-      email: new FormControl('', { nonNullable: true }),
+      username: new FormControl('', { nonNullable: true }),
       role: new FormControl('user', { nonNullable: true }),
       disabled: new FormControl(false, { nonNullable: true }),
       avatar: new FormControl<AvatarItem[]>([], { nonNullable: true }),

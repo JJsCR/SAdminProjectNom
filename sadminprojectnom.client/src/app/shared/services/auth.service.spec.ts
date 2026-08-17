@@ -56,18 +56,18 @@ describe('AuthService', () => {
 
     expect(localStorage.getItem(AUTH_TOKEN_STORAGE_KEY)).toBe('token-value');
     expect(localStorage.getItem(AUTH_USER_STORAGE_KEY)).toBe(
-      JSON.stringify({ email: 'jArmandoGO' }),
+      JSON.stringify({ name: 'jArmandoGO', username: 'jArmandoGO' }),
     );
     expect(router.navigate).toHaveBeenCalledWith([routes.DASHBOARD]);
 
     const currentUser = await firstValueFrom(service.getCurrentUserInfo());
-    expect(currentUser.email).toBe('jArmandoGO');
+    expect(currentUser.username).toBe('jArmandoGO');
   });
 
   it('clears auth storage and redirects to login on logout', () => {
     const { service, router } = setup(false);
     localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, 'token');
-    localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify({ email: 'a@b.c' }));
+    localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify({ username: 'a@b.c' }));
 
     service.logoutUser();
 
