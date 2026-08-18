@@ -75,7 +75,7 @@ export class CalendarPageComponent implements OnInit, AfterViewInit {
       liquidaciones: this.liquidacionesService.getAll()
     }).subscribe({
       next: ({ workers, projects, liquidaciones }) => {
-        this.workers = workers;
+        this.workers = workers.filter(w => w.activo);
         this.projects = projects;
         this.liquidaciones = liquidaciones;
         this.events = liquidaciones.map(l => ({
@@ -100,8 +100,7 @@ export class CalendarPageComponent implements OnInit, AfterViewInit {
       maxWidth: '90vw',
       data: {
         fechaPago,
-        workers: this.workers,
-        projects: this.projects
+        workers: this.workers
       }
     });
 

@@ -1,13 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WorkersService } from '../../../../workers/services/workers.service';
 import { LiquidacionesService, CreateLiquidacion } from '../../services/liquidaciones.service';
+import { ProjectsService } from '../../../../../shared/services/projects.service';
 
 export interface NewLiquidacionDialogData {
   fechaPago: string;
   workers: any[];
-  projects: any[];
 }
 
 @Component({
@@ -27,16 +26,17 @@ export class NewDayEventComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: NewLiquidacionDialogData,
     public dialogRef: MatDialogRef<NewDayEventComponent>,
-    private liquidacionesService: LiquidacionesService
+    private liquidacionesService: LiquidacionesService,
+    private projectsService: ProjectsService
   ) {}
 
   ngOnInit(): void {
     this.workers = this.data.workers || [];
-    this.projects = this.data.projects || [];
+    this.projects = [];
 
     this.form = new FormGroup({
       trabajadorId: new FormControl<number | null>(null, Validators.required),
-      proyectoId: new FormControl<number | null>(null, Validators.required),
+      proyectoId: new FormControl<number | null>({ value: null, disabled: true }, Validators.required),
       totalHoras: new FormControl<number>(0, [Validators.required, Validators.min(0.01)]),
       totalPagar: new FormControl<number>({ value: 0, disabled: true }),
       estado: new FormControl<string>('Pendiente', Validators.required),
@@ -45,8 +45,26 @@ export class NewDayEventComponent implements OnInit {
       fechaPago: new FormControl<string>({ value: this.data.fechaPago, disabled: true }),
     });
 
-    // Recalcular totalPagar cuando cambie trabajador o horas
-    this.form.get('trabajadorId')!.valueChanges.subscribe(() => this.calcularTotal());
+    // Cargar proyectos del trabajador seleccionado
+    this.form.get('trabajadorId')!.valueChanges.subscribe((workerId) => {
+      this.calcularTotal();
+      this.form.get('proyectoId')!.setValue(null);
+      if (workerId) {
+        this.projectsService.getByWorker(workerId).subscribe({
+          next: (projects) => {
+            this.projects = projects;
+            this.form.get('proyectoId')!.enable();
+          },
+          error: () => {
+            this.projects = [];
+            this.form.get('proyectoId')!.disable();
+          }
+        });
+      } else {
+        this.projects = [];
+        this.form.get('proyectoId')!.disable();
+      }
+    });
     this.form.get('totalHoras')!.valueChanges.subscribe(() => this.calcularTotal());
   }
 

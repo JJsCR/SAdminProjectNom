@@ -15,6 +15,10 @@ export class ClientsService {
     return this.http.get<Client[]>(baseUrl);
   }
 
+  getById(id: number): Observable<Client> {
+    return this.http.get<Client>(`${baseUrl}/${id}`);
+  }
+
   create(dto: CreateClientDto): Observable<Client> {
     return this.http.post<Client>(baseUrl, dto);
   }

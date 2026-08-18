@@ -36,12 +36,14 @@ interface ClientOption {
   id: number;
   nombre: string;
   apellido: string;
+  activo: boolean;
 }
 
 interface WorkerOption {
   trabajadorId: number;
   nombre: string;
   apellido: string;
+  activo: boolean;
 }
 
 @Component({
@@ -144,13 +146,13 @@ export class ProjectsManagementComponent implements OnInit, AfterViewInit {
 
   loadClients(): void {
     this.http.get<ClientOption[]>('/api/clients').subscribe((data) => {
-      this.clients.set(data);
+      this.clients.set(data.filter(c => c.activo));
     });
   }
 
   loadWorkers(): void {
     this.http.get<WorkerOption[]>('/api/workers').subscribe((data) => {
-      this.workers.set(data);
+      this.workers.set(data.filter(w => w.activo));
     });
   }
 

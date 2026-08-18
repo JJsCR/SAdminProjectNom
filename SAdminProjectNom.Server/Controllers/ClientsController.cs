@@ -43,6 +43,27 @@ namespace SAdminProjectNom.Server.Controllers
             public bool Activo { get; set; }
         }
 
+        // GET /api/clients/{id}
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var client = _db.Clients.Find(id);
+            if (client == null)
+                return NotFound();
+
+            return Ok(new ClientDto
+            {
+                Id = client.Id,
+                Nombre = client.Nombre,
+                Apellido = client.Apellido,
+                Cedula = client.Cedula,
+                Celular = client.Celular,
+                Correo = client.Correo,
+                Activo = client.Activo,
+                FechaCreacion = client.FechaCreacion
+            });
+        }
+
         // GET /api/clients
         [HttpGet]
         public IActionResult GetAll()

@@ -161,7 +161,7 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- Formulario de edici&#243;n inline -->
+  <!-- Formulario de edición inline -->
   @if (selectedWorker()) {
     <mat-card class="edit-card" #editCard>
       <mat-card-header>
@@ -216,6 +216,30 @@
             </button>
           </div>
         </form>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Gráfico de Salarios -->
+  @if (selectedWorker()) {
+    <mat-card class="salary-chart-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>attach_money</mat-icon>
+          💰 Historial de Salarios
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (salarioChartOptions()) {
+          <div
+            echarts
+            [options]="salarioChartOptions()!"
+            (chartClick)="onChartClick($event)"
+            style="height: 350px; width: 100%;"
+          ></div>
+        } @else {
+          <p class="loading-text">Cargando historial salarial...</p>
+        }
       </mat-card-content>
     </mat-card>
   }

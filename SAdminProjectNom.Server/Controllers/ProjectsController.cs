@@ -42,6 +42,18 @@ namespace SAdminProjectNom.Server.Controllers
             return Ok(projects);
         }
 
+        [HttpGet("by-worker/{workerId}")]
+        public async Task<ActionResult<IEnumerable<object>>> GetByWorker(int workerId)
+        {
+            var projects = await _context.ProyectoTrabajadores
+                .Where(pt => pt.TrabajadorId == workerId)
+                .Include(pt => pt.Proyecto)
+                .Select(pt => new { id = pt.Proyecto!.Id, nombre = pt.Proyecto.Name })
+                .ToListAsync();
+
+            return Ok(projects);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDetailDto>> GetById(int id)
         {

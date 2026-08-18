@@ -167,3 +167,24 @@
 .edit-card {
   border-left: 4px solid $blue;
 }
+
+// --- Salary chart card ---
+
+.salary-chart-card {
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 11px 0 $shadow-white, 0 3px 3px -2px $shadow-grey, 0 1px 8px 0 $shadow-dark-grey;
+  border-left: 4px solid #4caf50;
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  mat-card-content {
+    padding: 16px;
+  }
+}

@@ -159,26 +159,67 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <!-- Formato Factura -->
-            <div class="invoice">
-              <div class="invoice-header">
-                <h3>Cotización #{{cot.id}}</h3>
-                <p>Proyecto: {{cot.proyectoNombre}}</p>
-                <p>Fecha: {{cot.fechaCreacion | date:'dd/MM/yyyy'}}</p>
+            <!-- Formato Factura Profesional -->
+            <div class="invoice-pro">
+              <!-- Header: Logo + Company | Cotización # + Fecha -->
+              <div class="invoice-pro-header">
+                <div class="invoice-pro-company">
+                  @if (companyInfo) {
+                    <img [src]="companyInfo.logo" alt="Logo" class="company-logo" />
+                    <h2 class="company-name">{{companyInfo.nombre}}</h2>
+                    <p class="company-slogan">{{companyInfo.eslogan}}</p>
+                    <p class="company-phone">Tel: {{companyInfo.telefono}}</p>
+                  }
+                </div>
+                <div class="invoice-pro-meta">
+                  <h3 class="invoice-number">#{{cot.id}} / {{cot.fechaCreacion | date:'dd/MM/yyyy'}}</h3>
+                  <p>Proyecto: {{cot.proyectoNombre}}</p>
+                </div>
               </div>
+
+              <!-- Company Info + Client Info -->
+              <div class="invoice-pro-parties">
+                <div class="invoice-pro-party">
+                  <h4 class="party-title">Información de la Compañía</h4>
+                  @if (companyInfo) {
+                    <p><strong>{{companyInfo.nombre}}</strong></p>
+                    <p>{{companyInfo.eslogan}}</p>
+                    <p>Teléfono: {{companyInfo.telefono}}</p>
+                  }
+                </div>
+                <div class="invoice-pro-party client-party">
+                  <h4 class="party-title">Información del Cliente</h4>
+                  @if (clienteDetalle) {
+                    <p><strong>{{clienteDetalle.nombre}} {{clienteDetalle.apellido}}</strong></p>
+                    @if (clienteDetalle.cedula) {
+                      <p>Cédula: {{clienteDetalle.cedula}}</p>
+                    }
+                    <p>Celular: {{clienteDetalle.celular}}</p>
+                    @if (clienteDetalle.correo) {
+                      <p>Correo: {{clienteDetalle.correo}}</p>
+                    }
+                  }
+                </div>
+              </div>
+
+              <!-- Tabla de productos -->
               <table class="invoice-table">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Producto</th>
-                    <th>Cant.</th>
-                    <th>Precio Unit.</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
                     <th>Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  @for (detail of cot.detalles; track detail.id) {
+                  @for (detail of cot.detalles; track detail.id; let i = $index) {
                     <tr>
+                      <td>{{i + 1}}</td>
                       <td>{{detail.productoNombre}}</td>
+                      <td>—</td>
                       <td>{{detail.cantidad}}</td>
                       <td>₡{{detail.precioUnitario | number:'1.2-2'}}</td>
                       <td>₡{{detail.subtotal | number:'1.2-2'}}</td>
@@ -186,10 +227,19 @@
                   }
                 </tbody>
               </table>
+
+              <!-- Totales -->
               <div class="invoice-totals">
                 <p>Subtotal: ₡{{cot.subtotal | number:'1.2-2'}}</p>
                 <p>IVA (13%): ₡{{cot.impuesto | number:'1.2-2'}}</p>
                 <p class="invoice-total"><strong>Total: ₡{{cot.total | number:'1.2-2'}}</strong></p>
+              </div>
+
+              <!-- Botones -->
+              <div class="invoice-actions">
+                <button mat-flat-button color="primary" (click)="exportCotizacionExcel(cot)">
+                  <mat-icon>download</mat-icon> Exportar Excel
+                </button>
               </div>
             </div>
           </mat-expansion-panel>

@@ -81,6 +81,10 @@ export class ProjectsService {
     return this.http.get<ProjectDetailDto>(`${this.baseUrl}/${id}`);
   }
 
+  getByWorker(workerId: number): Observable<{id: number, nombre: string}[]> {
+    return this.http.get<{id: number, nombre: string}[]>(`${this.baseUrl}/by-worker/${workerId}`);
+  }
+
   create(dto: CreateProjectDto): Observable<any> {
     return this.http.post(this.baseUrl, dto);
   }

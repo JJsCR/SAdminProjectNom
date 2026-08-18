@@ -5,6 +5,11 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import { EChartsOption } from 'echarts';
+import { SalarioModalComponent, SalarioModalData } from '../../components/salario-modal/salario-modal.component';
 import {
   FormBuilder,
   FormGroup,
@@ -50,7 +55,12 @@ const AVATAR_COLORS = [
     MatChipsModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatDialogModule,
     BreadcrumbComponent,
+    NgxEchartsDirective,
+  ],
+  providers: [
+    provideEchartsCore({ echarts: () => import('echarts') }),
   ],
   templateUrl: './workers-page.component.html',
   styleUrls: ['./workers-page.component.scss'],
@@ -76,10 +86,15 @@ export class WorkersPageComponent implements OnInit {
   dataSource = new MatTableDataSource<Worker>([]);
   displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'montoHora', 'fechaCreacion', 'estado'];
 
+  salarioChartOptions = signal<EChartsOption | null>(null);
+  salarioData = signal<any[]>([]);
+
   constructor(
     private fb: FormBuilder,
     private workersService: WorkersService,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private http: HttpClient,
   ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
@@ -187,9 +202,154 @@ export class WorkersPageComponent implements OnInit {
       celular: worker.celular || '',
       montoHora: worker.montoHora,
     });
+    this.loadSalarioChart(worker.trabajadorId);
     setTimeout(() => {
       this.editCardRef?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+  }
+
+  private readonly MESES_CORTOS = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
+  private calcYMax(maxVal: number): number {
+    if (maxVal <= 0) return 5000;
+    const ticks = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 750000,
+      1000000, 2000000, 3000000, 5000000];
+    const target = maxVal * 1.3;
+    for (const t of ticks) {
+      if (t >= target) return t;
+    }
+    return Math.ceil(target / 1000000) * 1000000;
+  }
+
+  private formatYLabel(v: number): string {
+    if (v >= 1000000) return '₡' + (v / 1000000) + 'M';
+    if (v >= 1000) return '₡' + (v / 1000) + 'K';
+    return '₡' + v;
+  }
+
+  loadSalarioChart(trabajadorId: number): void {
+    this.http.get<any[]>(`/api/salarios/historial/${trabajadorId}`).subscribe({
+      next: (data) => {
+        this.salarioData.set(data);
+
+        const allMonths = this.MESES_CORTOS;
+
+        if (data.length === 0) {
+          this.salarioChartOptions.set({
+            grid: { top: 20, left: 50, right: 16, bottom: 32, containLabel: true },
+            xAxis: {
+              type: 'category', data: allMonths, boundaryGap: false,
+              axisLine: { lineStyle: { color: '#e0e0e0' } },
+              axisTick: { show: false },
+              axisLabel: { color: '#999', fontSize: 11 }
+            },
+            yAxis: {
+              type: 'value', min: 0, max: 5000,
+              splitLine: { lineStyle: { color: '#f0f0f0' } },
+              axisLine: { show: false }, axisTick: { show: false },
+              axisLabel: { color: '#999', fontSize: 11, formatter: (v: number) => this.formatYLabel(v) }
+            },
+            series: [{ type: 'line', data: [], smooth: 0.4, areaStyle: { opacity: 0.25, color: '#c5cff5' } }]
+          } as EChartsOption);
+        } else {
+          // Build map mes->salario from data
+          const salarioMap = new Map<number, number>();
+          const dataByMonth = new Map<number, any>();
+          for (const d of data) {
+            const current = salarioMap.get(d.mes) || 0;
+            salarioMap.set(d.mes, current + d.salarioReal);
+            if (!dataByMonth.has(d.mes)) dataByMonth.set(d.mes, d);
+          }
+
+          // Rebuild salarioData signal to have 12 entries (null for months without data)
+          const fullData: any[] = [];
+          const valores: (number | null)[] = [];
+          for (let m = 1; m <= 12; m++) {
+            const val = salarioMap.get(m) ?? null;
+            valores.push(val);
+            fullData.push(dataByMonth.get(m) ?? null);
+          }
+          this.salarioData.set(fullData);
+
+          const realValues = valores.filter((v): v is number => v !== null);
+          const maxVal = realValues.length > 0 ? Math.max(...realValues) : 0;
+          const yMax = this.calcYMax(maxVal);
+
+          this.salarioChartOptions.set({
+            grid: { top: 20, left: 50, right: 16, bottom: 32, containLabel: true },
+            tooltip: {
+              trigger: 'axis',
+              backgroundColor: '#fff',
+              borderColor: '#e0e0e0',
+              textStyle: { color: '#333', fontSize: 13 },
+              formatter: (params: any) => {
+                const p = params[0];
+                if (p.value == null) return `${p.name}<br/>Sin datos`;
+                return `<strong>${p.name}</strong><br/>Salario: ₡${Number(p.value).toLocaleString('es-CR', { minimumFractionDigits: 2 })}`;
+              }
+            },
+            xAxis: {
+              type: 'category', data: allMonths, boundaryGap: false,
+              axisLine: { lineStyle: { color: '#e0e0e0' } },
+              axisTick: { show: false },
+              axisLabel: { color: '#999', fontSize: 11 }
+            },
+            yAxis: {
+              type: 'value', min: 0, max: yMax,
+              splitLine: { lineStyle: { color: '#f0f0f0' } },
+              axisLine: { show: false }, axisTick: { show: false },
+              axisLabel: { color: '#999', fontSize: 11, formatter: (v: number) => this.formatYLabel(v) }
+            },
+            series: [{
+              type: 'line', data: valores, smooth: 0.4,
+              connectNulls: false,
+              showSymbol: false,
+              emphasis: { itemStyle: { borderWidth: 2, borderColor: '#5b8ff9', color: '#fff' }, scale: true },
+              areaStyle: {
+                opacity: 1,
+                color: {
+                  type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+                  colorStops: [
+                    { offset: 0, color: 'rgba(91,143,249,0.35)' },
+                    { offset: 1, color: 'rgba(91,143,249,0.05)' }
+                  ]
+                } as any
+              },
+              lineStyle: { color: '#7B9BF5', width: 2 },
+              itemStyle: { color: '#7B9BF5' },
+              symbolSize: 6
+            }]
+          } as EChartsOption);
+        }
+      },
+      error: () => {
+        this.salarioChartOptions.set(null);
+      }
+    });
+  }
+
+  onChartClick(event: any): void {
+    const data = this.salarioData();
+    if (!data || !data.length) return;
+    const idx = event.dataIndex;
+    const mesData = data[idx];
+    if (!mesData || mesData.salarioReal == null) return;
+    const worker = this.selectedWorker();
+    const dialogData: SalarioModalData = {
+      nombreTrabajador: worker ? `${worker.nombre} ${worker.apellido}` : '',
+      nombreMes: mesData.nombreMes,
+      horasTrabajadas: mesData.horasTrabajadas,
+      salarioReal: mesData.salarioReal,
+      tarifaHoraReal: mesData.tarifaHoraReal,
+      proyectos: mesData.proyectos
+    };
+    this.dialog.open(SalarioModalComponent, {
+      width: '720px',
+      maxWidth: '90vw',
+      autoFocus: false,
+      panelClass: 'salario-modal-panel',
+      data: dialogData
+    });
   }
 
   cancelEdit(): void {
