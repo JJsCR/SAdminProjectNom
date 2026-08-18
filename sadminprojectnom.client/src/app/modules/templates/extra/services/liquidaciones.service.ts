@@ -49,4 +49,8 @@ export class LiquidacionesService {
   create(dto: CreateLiquidacion): Observable<Liquidacion> {
     return this.http.post<Liquidacion>(baseUrl, dto);
   }
+
+  getByProyecto(proyectoId: number): Observable<Liquidacion[]> {
+    return this.http.get<Liquidacion[]>(`${baseUrl}/by-proyecto/${proyectoId}`);
+  }
 }

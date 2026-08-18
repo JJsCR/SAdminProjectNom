@@ -85,6 +85,43 @@ namespace SAdminProjectNom.Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("by-proyecto/{proyectoId}")]
+        public async Task<ActionResult<List<LiquidacionDto>>> GetByProyecto(int proyectoId)
+        {
+            var liquidaciones = await _db.LiquidacionesSemanales
+                .Include(l => l.Trabajador)
+                .Include(l => l.Detalles)
+                    .ThenInclude(d => d.Proyecto)
+                .Where(l => l.Detalles.Any(d => d.ProyectoId == proyectoId))
+                .OrderByDescending(l => l.FechaCreacion)
+                .ToListAsync();
+
+            var result = liquidaciones.Select(l =>
+            {
+                var detalle = l.Detalles.FirstOrDefault(d => d.ProyectoId == proyectoId);
+                return new LiquidacionDto
+                {
+                    LiquidacionId = l.LiquidacionId,
+                    TrabajadorId = l.TrabajadorId,
+                    TrabajadorNombre = $"{l.Trabajador?.Nombre} {l.Trabajador?.Apellido}",
+                    TrabajadorCedula = l.Trabajador?.Cedula ?? "",
+                    MontoHora = l.Trabajador?.MontoHora ?? 0,
+                    TotalHoras = l.TotalHoras,
+                    TotalPagar = l.TotalPagar,
+                    Estado = l.Estado,
+                    FechaPago = l.FechaPago?.ToString("yyyy-MM-dd"),
+                    MetodoPago = l.MetodoPago,
+                    NumeroReferencia = l.NumeroReferencia,
+                    FechaCreacion = l.FechaCreacion,
+                    ProyectoId = detalle?.ProyectoId,
+                    ProyectoNombre = detalle?.Proyecto?.Name,
+                    ProyectoUbicacion = detalle?.Proyecto?.Ubicacion
+                };
+            }).ToList();
+
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<LiquidacionDto>> GetById(int id)
         {

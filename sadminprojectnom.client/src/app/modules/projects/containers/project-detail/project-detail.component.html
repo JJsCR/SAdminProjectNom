@@ -34,6 +34,15 @@
           <span class="summary-label">Saldo Pendiente</span>
           <span class="summary-value warn">₡{{project.saldoPendiente | number:'1.2-2'}}</span>
         </div>
+        <div class="summary-item">
+          <span class="summary-label">Gastos</span>
+          <span class="summary-value warn">₡{{totalGastos | number:'1.2-2'}}</span>
+        </div>
+        <div class="summary-item">
+          <button mat-flat-button color="accent" (click)="exportGastosExcel()">
+            <mat-icon>download</mat-icon> Exportar Gastos
+          </button>
+        </div>
       </div>
 
       <button mat-flat-button color="primary" (click)="toggleAbonoForm()">
@@ -104,6 +113,14 @@
           <mat-list-item>
             <mat-icon matListItemIcon>person</mat-icon>
             <span matListItemTitle>{{worker.nombreCompleto}}</span>
+            <span matListItemMeta>Liquidación: ₡{{getTotalLiquidacionTrabajador(worker.trabajadorId) | number:'1.2-2'}}</span>
+          </mat-list-item>
+        }
+        @if (project.trabajadores.length > 0) {
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <strong matListItemTitle>Total Liquidaciones</strong>
+            <span matListItemMeta><strong>₡{{totalLiquidaciones | number:'1.2-2'}}</strong></span>
           </mat-list-item>
         }
         @if (project.trabajadores.length === 0) {
@@ -247,6 +264,11 @@
       </mat-accordion>
       @if (cotizaciones.length === 0) {
         <p class="empty-text">No hay cotizaciones asociadas a este proyecto.</p>
+      }
+      @if (cotizaciones.length > 0) {
+        <div class="invoice-totals" style="margin-top: 16px;">
+          <p class="invoice-total"><strong>Total Cotizaciones: ₡{{totalCotizaciones | number:'1.2-2'}}</strong></p>
+        </div>
       }
     </mat-card-content>
   </mat-card>

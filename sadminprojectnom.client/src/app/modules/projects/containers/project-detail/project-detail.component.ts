@@ -29,6 +29,7 @@ import {
   CreateAbonoDto,
 } from '../../../../shared/services/projects.service';
 import { CotizacionesService, CotizacionDetailDto } from '../../../../shared/services/cotizaciones.service';
+import { LiquidacionesService, Liquidacion } from '../../../templates/extra/services/liquidaciones.service';
 import { ClientsService } from '../../../clients/services/clients.service';
 import { Client } from '../../../clients/models/client.model';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/ui-elements/breadcrumb/breadcrumb.component';
@@ -70,6 +71,7 @@ export interface CompanyInfo {
 export class ProjectDetailComponent implements OnInit {
   project: ProjectDetailDto | null = null;
   cotizaciones: CotizacionDetailDto[] = [];
+  liquidaciones: Liquidacion[] = [];
   showAbonoForm = false;
   abonoForm!: FormGroup;
   metodosPago = ['Efectivo', 'Transferencia', 'Sinpe Móvil', 'Cheque', 'Tarjeta'];
@@ -86,6 +88,7 @@ export class ProjectDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
     private cotizacionesService: CotizacionesService,
+    private liquidacionesService: LiquidacionesService,
     private clientsService: ClientsService,
     private http: HttpClient,
     private fb: FormBuilder,
@@ -109,6 +112,7 @@ export class ProjectDetailComponent implements OnInit {
     if (id) {
       this.loadProject(id);
       this.loadCotizaciones(id);
+      this.loadLiquidaciones(id);
     }
   }
 
@@ -130,6 +134,202 @@ export class ProjectDetailComponent implements OnInit {
           this.cotizaciones.push(detail);
         });
       });
+    });
+  }
+
+  loadLiquidaciones(proyectoId: number): void {
+    this.liquidacionesService.getByProyecto(proyectoId).subscribe((list) => {
+      this.liquidaciones = list;
+    });
+  }
+
+  get totalCotizaciones(): number {
+    return this.cotizaciones.reduce((sum, c) => sum + c.total, 0);
+  }
+
+  get totalLiquidaciones(): number {
+    return this.liquidaciones.reduce((sum, l) => sum + l.totalPagar, 0);
+  }
+
+  get totalGastos(): number {
+    return this.totalCotizaciones + this.totalLiquidaciones;
+  }
+
+  getLiquidacionesPorTrabajador(trabajadorId: number): Liquidacion[] {
+    return this.liquidaciones.filter(l => l.trabajadorId === trabajadorId);
+  }
+
+  getTotalLiquidacionTrabajador(trabajadorId: number): number {
+    return this.getLiquidacionesPorTrabajador(trabajadorId).reduce((sum, l) => sum + l.totalPagar, 0);
+  }
+
+  exportGastosExcel(): void {
+    const workbook = new Workbook();
+    const sheet = workbook.addWorksheet('Gastos');
+
+    sheet.getColumn(1).width = 5;
+    sheet.getColumn(2).width = 30;
+    sheet.getColumn(3).width = 20;
+    sheet.getColumn(4).width = 18;
+    sheet.getColumn(5).width = 18;
+    sheet.getColumn(6).width = 18;
+
+    const titleRow = sheet.addRow(['GASTOS']);
+    titleRow.font = { bold: true, size: 16, color: { argb: 'FF333333' } };
+    sheet.mergeCells('A1:F1');
+    titleRow.height = 24;
+
+    sheet.addRow([]);
+
+    this.http.get('assets/images/company-logo.png', { responseType: 'arraybuffer' }).subscribe({
+      next: (logoBuffer) => {
+        const logoId = workbook.addImage({ buffer: logoBuffer, extension: 'png' });
+        sheet.addImage(logoId, { tl: { col: 0, row: 2 }, ext: { width: 80, height: 80 } });
+        this.buildGastosExcelContent(workbook, sheet);
+      },
+      error: () => {
+        this.buildGastosExcelContent(workbook, sheet);
+      }
+    });
+  }
+
+  private buildGastosExcelContent(workbook: Workbook, sheet: any): void {
+    let currentRow = 3;
+
+    if (this.companyInfo) {
+      currentRow = 7;
+      const compNameRow = sheet.getRow(currentRow);
+      sheet.getCell(`A${currentRow}`).value = this.companyInfo.nombre;
+      compNameRow.font = { bold: true, size: 12 };
+      currentRow++;
+      sheet.getCell(`A${currentRow}`).value = this.companyInfo.eslogan;
+      sheet.getRow(currentRow).font = { italic: true, size: 10, color: { argb: 'FF777777' } };
+      currentRow++;
+      sheet.getCell(`A${currentRow}`).value = 'Teléfono: ' + this.companyInfo.telefono;
+      sheet.getRow(currentRow).font = { size: 10 };
+      currentRow++;
+    }
+
+    if (this.clienteDetalle) {
+      let clientRow = 3;
+      sheet.getCell(`E${clientRow}`).value = 'Información del Cliente';
+      sheet.getCell(`E${clientRow}`).font = { bold: true, size: 11, color: { argb: 'FFE0A800' } };
+      clientRow++;
+      sheet.getCell(`E${clientRow}`).value = this.clienteDetalle.nombre + ' ' + this.clienteDetalle.apellido;
+      sheet.getCell(`E${clientRow}`).font = { bold: true, size: 10 };
+      clientRow++;
+      if (this.clienteDetalle.cedula) {
+        sheet.getCell(`E${clientRow}`).value = 'Cédula: ' + this.clienteDetalle.cedula;
+        sheet.getCell(`E${clientRow}`).font = { size: 10 };
+        clientRow++;
+      }
+      sheet.getCell(`E${clientRow}`).value = 'Celular: ' + this.clienteDetalle.celular;
+      sheet.getCell(`E${clientRow}`).font = { size: 10 };
+      clientRow++;
+      if (this.clienteDetalle.correo) {
+        sheet.getCell(`E${clientRow}`).value = 'Correo: ' + this.clienteDetalle.correo;
+        sheet.getCell(`E${clientRow}`).font = { size: 10 };
+      }
+    }
+
+    currentRow++;
+    sheet.getCell(`A${currentRow}`).value = 'Proyecto: ' + (this.project?.nombre || '');
+    sheet.getRow(currentRow).font = { bold: true, size: 11 };
+    currentRow++;
+    sheet.getCell(`A${currentRow}`).value = 'Fecha: ' + new Date().toLocaleDateString('es-CR');
+    currentRow += 2;
+
+    // LIQUIDACIONES SECTION
+    sheet.getCell(`A${currentRow}`).value = 'LIQUIDACIONES';
+    sheet.getRow(currentRow).font = { bold: true, size: 12 };
+    currentRow++;
+
+    const liqHeaders = ['#', 'Trabajador', 'Horas', 'Monto/Hora', 'Total'];
+    const liqHeaderRow = sheet.getRow(currentRow);
+    liqHeaders.forEach((h, i) => {
+      const cell = liqHeaderRow.getCell(i + 1);
+      cell.value = h;
+      cell.font = { bold: true, size: 10 };
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF5F5F5' } };
+      cell.border = { bottom: { style: 'thin', color: { argb: 'FFCCCCCC' } } };
+    });
+    currentRow++;
+
+    this.liquidaciones.forEach((l, i) => {
+      const row = sheet.getRow(currentRow);
+      row.getCell(1).value = i + 1;
+      row.getCell(2).value = l.trabajadorNombre;
+      row.getCell(3).value = l.totalHoras;
+      row.getCell(4).value = l.montoHora;
+      row.getCell(4).numFmt = '₡#,##0.00';
+      row.getCell(5).value = l.totalPagar;
+      row.getCell(5).numFmt = '₡#,##0.00';
+      currentRow++;
+    });
+
+    currentRow++;
+    const totalLiqRow = sheet.getRow(currentRow);
+    totalLiqRow.getCell(5).value = 'Total Liquidaciones:';
+    totalLiqRow.getCell(5).font = { bold: true };
+    totalLiqRow.getCell(5).alignment = { horizontal: 'right' };
+    totalLiqRow.getCell(6).value = this.totalLiquidaciones;
+    totalLiqRow.getCell(6).numFmt = '₡#,##0.00';
+    totalLiqRow.getCell(6).font = { bold: true };
+    currentRow += 2;
+
+    // COTIZACIONES SECTION
+    sheet.getCell(`A${currentRow}`).value = 'COTIZACIONES';
+    sheet.getRow(currentRow).font = { bold: true, size: 12 };
+    currentRow++;
+
+    const cotHeaders = ['#', 'Cotización', 'Fecha', 'Subtotal', 'IVA', 'Total'];
+    const cotHeaderRow = sheet.getRow(currentRow);
+    cotHeaders.forEach((h, i) => {
+      const cell = cotHeaderRow.getCell(i + 1);
+      cell.value = h;
+      cell.font = { bold: true, size: 10 };
+      cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF5F5F5' } };
+      cell.border = { bottom: { style: 'thin', color: { argb: 'FFCCCCCC' } } };
+    });
+    currentRow++;
+
+    this.cotizaciones.forEach((c, i) => {
+      const row = sheet.getRow(currentRow);
+      row.getCell(1).value = i + 1;
+      row.getCell(2).value = 'Cotización #' + c.id;
+      row.getCell(3).value = new Date(c.fechaCreacion).toLocaleDateString('es-CR');
+      row.getCell(4).value = c.subtotal;
+      row.getCell(4).numFmt = '₡#,##0.00';
+      row.getCell(5).value = c.impuesto;
+      row.getCell(5).numFmt = '₡#,##0.00';
+      row.getCell(6).value = c.total;
+      row.getCell(6).numFmt = '₡#,##0.00';
+      currentRow++;
+    });
+
+    currentRow++;
+    const totalCotRow = sheet.getRow(currentRow);
+    totalCotRow.getCell(5).value = 'Total Cotizaciones:';
+    totalCotRow.getCell(5).font = { bold: true };
+    totalCotRow.getCell(5).alignment = { horizontal: 'right' };
+    totalCotRow.getCell(6).value = this.totalCotizaciones;
+    totalCotRow.getCell(6).numFmt = '₡#,##0.00';
+    totalCotRow.getCell(6).font = { bold: true };
+    currentRow += 2;
+
+    // GRAND TOTAL
+    const grandTotalRow = sheet.getRow(currentRow);
+    grandTotalRow.getCell(5).value = 'TOTAL GASTOS:';
+    grandTotalRow.getCell(5).font = { bold: true, size: 12 };
+    grandTotalRow.getCell(5).alignment = { horizontal: 'right' };
+    grandTotalRow.getCell(6).value = this.totalGastos;
+    grandTotalRow.getCell(6).numFmt = '₡#,##0.00';
+    grandTotalRow.getCell(6).font = { bold: true, size: 12, color: { argb: 'FF1565C0' } };
+    grandTotalRow.getCell(6).alignment = { horizontal: 'right' };
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, `Gastos_Proyecto_${this.project?.id}.xlsx`);
     });
   }
 
