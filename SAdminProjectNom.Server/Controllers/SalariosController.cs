@@ -52,7 +52,10 @@ namespace SAdminProjectNom.Server.Controllers
                 return Ok(new List<SalarioMensualDto>());
 
             var mesesAgrupados = liquidaciones
-                .GroupBy(l => new { l.FechaCreacion.Year, l.FechaCreacion.Month })
+                .GroupBy(l => new {
+                    Year = l.FechaPago.HasValue ? l.FechaPago.Value.Year : l.FechaCreacion.Year,
+                    Month = l.FechaPago.HasValue ? l.FechaPago.Value.Month : l.FechaCreacion.Month
+                })
                 .OrderBy(g => g.Key.Year).ThenBy(g => g.Key.Month)
                 .Select(g => new
                 {
@@ -94,9 +97,7 @@ namespace SAdminProjectNom.Server.Controllers
                     NombreMes = $"{nombreMes} {m.Anio}",
                     HorasTrabajadas = m.HorasTrabajadas,
                     SalarioReal = m.TotalPagar,
-                    TarifaHoraReal = m.HorasTrabajadas > 0
-                        ? Math.Round(m.TotalPagar / m.HorasTrabajadas, 2)
-                        : 0,
+                    TarifaHoraReal = Math.Round(m.TotalPagar / 220m, 2),
                     Proyectos = proyectosMes
                 };
             }).ToList();
