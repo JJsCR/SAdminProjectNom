@@ -10,4 +10,7 @@
     <!-- Folder where production build objects will be placed (must match angular.json's architect.build.options.outputPath) -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build\</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="src\app\modules\salarios\containers\salarios-page\" />
+  </ItemGroup>
 </Project>

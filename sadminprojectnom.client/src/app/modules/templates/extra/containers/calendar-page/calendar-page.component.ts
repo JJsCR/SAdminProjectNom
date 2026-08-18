@@ -3,6 +3,7 @@ import { BreadcrumbItem } from '../../../../../shared/ui-elements/breadcrumb/bre
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { colors, routes } from '../../../../../consts';
 import { Calendar, CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
+import esLocale from '@fullcalendar/core/locales/es';
 import { MatDialog } from '@angular/material/dialog';
 import { DayInfoComponent } from '../../components/day-info/day-info.component';
 import { NewDayEventComponent } from '../../components/new-day-event/new-day-event.component';
@@ -35,6 +36,7 @@ export class CalendarPageComponent implements OnInit, AfterViewInit {
   public colors: typeof colors = colors;
   public calendarOptions: CalendarOptions = {};
   public events: any[] = [];
+  public currentMonthTitle: string = '';
   public breadcrumbItems: BreadcrumbItem[] = [
     { label: 'Inicio', route: '/inicio' },
     { label: 'Liquidaciones' },
@@ -54,9 +56,15 @@ export class CalendarPageComponent implements OnInit, AfterViewInit {
     this.calendarOptions = {
       initialView: this.calendarViewTypes.month,
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      locale: esLocale,
       selectable: true,
       editable: false,
       headerToolbar: false,
+      datesSet: (info) => {
+        const date = info.view.currentStart;
+        this.currentMonthTitle = date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
+          .replace(/^(\w)/, c => c.toUpperCase());
+      },
       dateClick: this.onDateClick.bind(this),
       eventClick: this.onEventClick.bind(this),
     };
