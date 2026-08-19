@@ -38,6 +38,10 @@ namespace SAdminProjectNom.Server.Models
         [Column("MontoHora")]
         public decimal MontoHora { get; set; }
 
+        [Required]
+        [Column("MontoHoraS")]
+        public decimal MontoHoraS { get; set; }
+
         [Column("Activo")]
         public bool Activo { get; set; } = true;
 

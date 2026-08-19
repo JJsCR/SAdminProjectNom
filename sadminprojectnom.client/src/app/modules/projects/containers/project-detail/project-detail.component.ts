@@ -151,8 +151,12 @@ export class ProjectDetailComponent implements OnInit {
     return this.liquidaciones.reduce((sum, l) => sum + l.totalPagar, 0);
   }
 
+  get totalSalarios(): number {
+    return this.liquidaciones.reduce((sum, l) => sum + l.totalS, 0);
+  }
+
   get totalGastos(): number {
-    return this.totalCotizaciones + this.totalLiquidaciones;
+    return this.totalCotizaciones + this.totalLiquidaciones + this.totalSalarios;
   }
 
   getLiquidacionesPorTrabajador(trabajadorId: number): Liquidacion[] {
@@ -161,6 +165,10 @@ export class ProjectDetailComponent implements OnInit {
 
   getTotalLiquidacionTrabajador(trabajadorId: number): number {
     return this.getLiquidacionesPorTrabajador(trabajadorId).reduce((sum, l) => sum + l.totalPagar, 0);
+  }
+
+  getTotalSalarioTrabajador(trabajadorId: number): number {
+    return this.getLiquidacionesPorTrabajador(trabajadorId).reduce((sum, l) => sum + l.totalS, 0);
   }
 
   exportGastosExcel(): void {
@@ -244,7 +252,7 @@ export class ProjectDetailComponent implements OnInit {
     sheet.getRow(currentRow).font = { bold: true, size: 12 };
     currentRow++;
 
-    const liqHeaders = ['#', 'Trabajador', 'Horas', 'Monto/Hora', 'Total'];
+    const liqHeaders = ['#', 'Trabajador', 'Horas', 'Salario', 'Liquidación'];
     const liqHeaderRow = sheet.getRow(currentRow);
     liqHeaders.forEach((h, i) => {
       const cell = liqHeaderRow.getCell(i + 1);
@@ -260,7 +268,7 @@ export class ProjectDetailComponent implements OnInit {
       row.getCell(1).value = i + 1;
       row.getCell(2).value = l.trabajadorNombre;
       row.getCell(3).value = l.totalHoras;
-      row.getCell(4).value = l.montoHora;
+      row.getCell(4).value = l.totalS;
       row.getCell(4).numFmt = '₡#,##0.00';
       row.getCell(5).value = l.totalPagar;
       row.getCell(5).numFmt = '₡#,##0.00';
@@ -269,12 +277,15 @@ export class ProjectDetailComponent implements OnInit {
 
     currentRow++;
     const totalLiqRow = sheet.getRow(currentRow);
-    totalLiqRow.getCell(5).value = 'Total Liquidaciones:';
+    totalLiqRow.getCell(3).value = 'Total:';
+    totalLiqRow.getCell(3).font = { bold: true };
+    totalLiqRow.getCell(3).alignment = { horizontal: 'right' };
+    totalLiqRow.getCell(4).value = this.totalSalarios;
+    totalLiqRow.getCell(4).numFmt = '₡#,##0.00';
+    totalLiqRow.getCell(4).font = { bold: true };
+    totalLiqRow.getCell(5).value = this.totalLiquidaciones;
+    totalLiqRow.getCell(5).numFmt = '₡#,##0.00';
     totalLiqRow.getCell(5).font = { bold: true };
-    totalLiqRow.getCell(5).alignment = { horizontal: 'right' };
-    totalLiqRow.getCell(6).value = this.totalLiquidaciones;
-    totalLiqRow.getCell(6).numFmt = '₡#,##0.00';
-    totalLiqRow.getCell(6).font = { bold: true };
     currentRow += 2;
 
     // COTIZACIONES SECTION

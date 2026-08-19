@@ -35,5 +35,9 @@ namespace SAdminProjectNom.Server.Models
         [Required]
         [Column("Total")]
         public decimal Total { get; set; }
+
+        [Required]
+        [Column("TotalS")]
+        public decimal TotalS { get; set; }
     }
 }

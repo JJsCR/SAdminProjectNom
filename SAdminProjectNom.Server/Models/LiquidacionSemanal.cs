@@ -28,6 +28,10 @@ namespace SAdminProjectNom.Server.Models
         public decimal TotalPagar { get; set; }
 
         [Required]
+        [Column("TotalS", TypeName = "decimal(18,2)")]
+        public decimal TotalS { get; set; }
+
+        [Required]
         [Column("Estado")]
         [MaxLength(30)]
         public string Estado { get; set; } = "Pendiente";

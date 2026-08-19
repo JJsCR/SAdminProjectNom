@@ -31,8 +31,16 @@
       <input matInput type="number" formControlName="totalPagar" readonly>
     </mat-form-field>
 
+    <mat-form-field class="form full-width">
+      <mat-label>Total Salarial (₡)</mat-label>
+      <input matInput type="number" formControlName="totalSalarial" readonly>
+    </mat-form-field>
+
     <p *ngIf="selectedWorkerMontoHora > 0" class="subtitle">
       Tarifa: ₡{{selectedWorkerMontoHora}}/hr × {{form.get('totalHoras')?.value}} hrs
+    </p>
+    <p *ngIf="selectedWorkerMontoHoraS > 0" class="subtitle">
+      Tarifa Salarial: ₡{{selectedWorkerMontoHoraS}}/hr × {{form.get('totalHoras')?.value}} hrs
     </p>
 
     <mat-form-field class="form full-width">

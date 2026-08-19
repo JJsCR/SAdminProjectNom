@@ -26,8 +26,10 @@ namespace SAdminProjectNom.Server.Controllers
             public string TrabajadorNombre { get; set; } = string.Empty;
             public string TrabajadorCedula { get; set; } = string.Empty;
             public decimal MontoHora { get; set; }
+            public decimal MontoHoraS { get; set; }
             public decimal TotalHoras { get; set; }
             public decimal TotalPagar { get; set; }
+            public decimal TotalS { get; set; }
             public string Estado { get; set; } = string.Empty;
             public string? FechaPago { get; set; }
             public string? MetodoPago { get; set; }
@@ -69,8 +71,10 @@ namespace SAdminProjectNom.Server.Controllers
                     TrabajadorNombre = $"{l.Trabajador?.Nombre} {l.Trabajador?.Apellido}",
                     TrabajadorCedula = l.Trabajador?.Cedula ?? "",
                     MontoHora = l.Trabajador?.MontoHora ?? 0,
+                    MontoHoraS = l.Trabajador?.MontoHoraS ?? 0,
                     TotalHoras = l.TotalHoras,
                     TotalPagar = l.TotalPagar,
+                    TotalS = l.TotalS,
                     Estado = l.Estado,
                     FechaPago = l.FechaPago?.ToString("yyyy-MM-dd"),
                     MetodoPago = l.MetodoPago,
@@ -106,8 +110,10 @@ namespace SAdminProjectNom.Server.Controllers
                     TrabajadorNombre = $"{l.Trabajador?.Nombre} {l.Trabajador?.Apellido}",
                     TrabajadorCedula = l.Trabajador?.Cedula ?? "",
                     MontoHora = l.Trabajador?.MontoHora ?? 0,
+                    MontoHoraS = l.Trabajador?.MontoHoraS ?? 0,
                     TotalHoras = l.TotalHoras,
                     TotalPagar = l.TotalPagar,
+                    TotalS = l.TotalS,
                     Estado = l.Estado,
                     FechaPago = l.FechaPago?.ToString("yyyy-MM-dd"),
                     MetodoPago = l.MetodoPago,
@@ -141,8 +147,10 @@ namespace SAdminProjectNom.Server.Controllers
                 TrabajadorNombre = $"{l.Trabajador?.Nombre} {l.Trabajador?.Apellido}",
                 TrabajadorCedula = l.Trabajador?.Cedula ?? "",
                 MontoHora = l.Trabajador?.MontoHora ?? 0,
+                MontoHoraS = l.Trabajador?.MontoHoraS ?? 0,
                 TotalHoras = l.TotalHoras,
                 TotalPagar = l.TotalPagar,
+                TotalS = l.TotalS,
                 Estado = l.Estado,
                 FechaPago = l.FechaPago?.ToString("yyyy-MM-dd"),
                 MetodoPago = l.MetodoPago,
@@ -168,12 +176,14 @@ namespace SAdminProjectNom.Server.Controllers
                 return BadRequest($"Estado inválido: '{dto.Estado}'. Valores permitidos: {string.Join(", ", estadosPermitidos)}");
 
             var totalPagar = dto.TotalHoras * trabajador.MontoHora;
+            var totalS = dto.TotalHoras * trabajador.MontoHoraS;
 
             var liquidacion = new LiquidacionSemanal
             {
                 TrabajadorId = dto.TrabajadorId,
                 TotalHoras = dto.TotalHoras,
                 TotalPagar = totalPagar,
+                TotalS = totalS,
                 Estado = dto.Estado,
                 FechaPago = string.IsNullOrEmpty(dto.FechaPago) ? null : DateOnly.Parse(dto.FechaPago),
                 MetodoPago = dto.MetodoPago,
@@ -191,7 +201,8 @@ namespace SAdminProjectNom.Server.Controllers
                 ProyectoId = dto.ProyectoId,
                 Horas = dto.TotalHoras,
                 MontoHora = trabajador.MontoHora,
-                Total = dto.TotalHoras * trabajador.MontoHora
+                Total = dto.TotalHoras * trabajador.MontoHora,
+                TotalS = dto.TotalHoras * trabajador.MontoHoraS
             };
             _db.DetalleLiquidaciones.Add(detalle);
             await _db.SaveChangesAsync();
@@ -203,8 +214,10 @@ namespace SAdminProjectNom.Server.Controllers
                 TrabajadorNombre = $"{trabajador.Nombre} {trabajador.Apellido}",
                 TrabajadorCedula = trabajador.Cedula,
                 MontoHora = trabajador.MontoHora,
+                MontoHoraS = trabajador.MontoHoraS,
                 TotalHoras = liquidacion.TotalHoras,
                 TotalPagar = liquidacion.TotalPagar,
+                TotalS = liquidacion.TotalS,
                 Estado = liquidacion.Estado,
                 FechaPago = liquidacion.FechaPago?.ToString("yyyy-MM-dd"),
                 MetodoPago = liquidacion.MetodoPago,

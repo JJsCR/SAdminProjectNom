@@ -6,6 +6,7 @@ export interface Worker {
   fechaNacimiento: string;
   celular?: string | null;
   montoHora: number;
+  montoHoraS: number;
   activo: boolean;
   fechaCreacion: string;
 }
@@ -17,6 +18,7 @@ export interface CreateWorkerDto {
   fechaNacimiento: string;
   celular?: string;
   montoHora: number;
+  montoHoraS: number;
 }
 
 export interface UpdateWorkerDto {
@@ -26,4 +28,5 @@ export interface UpdateWorkerDto {
   fechaNacimiento: string;
   celular?: string;
   montoHora: number;
+  montoHoraS: number;
 }

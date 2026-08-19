@@ -84,7 +84,7 @@ export class WorkersPageComponent implements OnInit {
   selectedWorker = signal<Worker | null>(null);
   searchValue = signal('');
   dataSource = new MatTableDataSource<Worker>([]);
-  displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'montoHora', 'fechaCreacion', 'estado'];
+  displayedColumns = ['nombreCompleto', 'cedula', 'fechaNacimiento', 'celular', 'montoHora', 'montoHoraS', 'fechaCreacion', 'estado'];
 
   salarioChartOptions = signal<EChartsOption | null>(null);
   salarioData = signal<any[]>([]);
@@ -103,6 +103,7 @@ export class WorkersPageComponent implements OnInit {
       fechaNacimiento: [null, Validators.required],
       celular: [''],
       montoHora: [null, [Validators.required, Validators.min(0)]],
+      montoHoraS: [null, [Validators.required, Validators.min(0)]],
     });
 
     this.editForm = this.fb.group({
@@ -112,6 +113,7 @@ export class WorkersPageComponent implements OnInit {
       fechaNacimiento: [null, Validators.required],
       celular: [''],
       montoHora: [null, [Validators.required, Validators.min(0)]],
+      montoHoraS: [null, [Validators.required, Validators.min(0)]],
     });
 
     this.dataSource.filterPredicate = (data: Worker, filter: string) => {
@@ -154,6 +156,7 @@ export class WorkersPageComponent implements OnInit {
       fechaNacimiento: new Date(this.form.value.fechaNacimiento).toISOString(),
       celular: this.form.value.celular || undefined,
       montoHora: this.form.value.montoHora,
+      montoHoraS: this.form.value.montoHoraS,
     };
 
     this.workersService.create(dto).subscribe({
@@ -201,6 +204,7 @@ export class WorkersPageComponent implements OnInit {
       fechaNacimiento: new Date(worker.fechaNacimiento),
       celular: worker.celular || '',
       montoHora: worker.montoHora,
+      montoHoraS: worker.montoHoraS,
     });
     this.loadSalarioChart(worker.trabajadorId);
     setTimeout(() => {
@@ -238,21 +242,23 @@ export class WorkersPageComponent implements OnInit {
 
         for (const d of data) {
           const idx = d.mes - 1;
-          valores[idx] += d.salarioReal;
+          valores[idx] += d.totalS;
           if (!dataByMonth[idx]) {
             dataByMonth[idx] = {
               nombreMes: d.nombreMes,
               horasTrabajadas: d.horasTrabajadas,
-              salarioReal: d.salarioReal,
-              tarifaHoraReal: d.tarifaHoraReal,
-              proyectos: d.proyectos ? [...d.proyectos] : []
+              totalS: d.totalS,
+              proyectos: d.proyectos ? [...d.proyectos] : [],
+              semanas: d.semanas ? [...d.semanas] : []
             };
           } else {
-            dataByMonth[idx].salarioReal += d.salarioReal;
+            dataByMonth[idx].totalS += d.totalS;
             dataByMonth[idx].horasTrabajadas += d.horasTrabajadas;
-            dataByMonth[idx].tarifaHoraReal = Math.round((dataByMonth[idx].salarioReal / 220) * 100) / 100;
             if (d.proyectos) {
               dataByMonth[idx].proyectos = [...dataByMonth[idx].proyectos, ...d.proyectos];
+            }
+            if (d.semanas) {
+              dataByMonth[idx].semanas = [...dataByMonth[idx].semanas, ...d.semanas];
             }
           }
         }
@@ -332,15 +338,15 @@ export class WorkersPageComponent implements OnInit {
     if (!data || !data.length) return;
     const idx = event.dataIndex;
     const mesData = data[idx];
-    if (!mesData || mesData.salarioReal == null) return;
+    if (!mesData || mesData.totalS == null) return;
     const worker = this.selectedWorker();
     const dialogData: SalarioModalData = {
       nombreTrabajador: worker ? `${worker.nombre} ${worker.apellido}` : '',
       nombreMes: mesData.nombreMes,
       horasTrabajadas: mesData.horasTrabajadas,
-      salarioReal: mesData.salarioReal,
-      tarifaHoraReal: mesData.tarifaHoraReal,
-      proyectos: mesData.proyectos
+      totalS: mesData.totalS,
+      proyectos: mesData.proyectos,
+      semanas: mesData.semanas ?? []
     };
     this.dialog.open(SalarioModalComponent, {
       width: '720px',
@@ -367,6 +373,7 @@ export class WorkersPageComponent implements OnInit {
       fechaNacimiento: new Date(this.editForm.value.fechaNacimiento).toISOString(),
       celular: this.editForm.value.celular || undefined,
       montoHora: this.editForm.value.montoHora,
+      montoHoraS: this.editForm.value.montoHoraS,
     };
 
     this.workersService.update(worker.trabajadorId, dto).subscribe({

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
 using SAdminProjectNom.Server.Data;
 using SAdminProjectNom.Server.Models;
 
@@ -26,6 +27,8 @@ namespace SAdminProjectNom.Server.Controllers
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
             public decimal MontoHora { get; set; }
+            [JsonPropertyName("montoHoraS")]
+            public decimal MontoHoraS { get; set; }
             public bool Activo { get; set; }
             public DateTime FechaCreacion { get; set; }
         }
@@ -38,6 +41,8 @@ namespace SAdminProjectNom.Server.Controllers
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
             public decimal MontoHora { get; set; }
+            [JsonPropertyName("montoHoraS")]
+            public decimal MontoHoraS { get; set; }
         }
 
         public class UpdateWorkerDto
@@ -48,6 +53,8 @@ namespace SAdminProjectNom.Server.Controllers
             public DateTime FechaNacimiento { get; set; }
             public string? Celular { get; set; }
             public decimal MontoHora { get; set; }
+            [JsonPropertyName("montoHoraS")]
+            public decimal MontoHoraS { get; set; }
         }
 
         public class PatchStatusDto
@@ -77,6 +84,7 @@ namespace SAdminProjectNom.Server.Controllers
                     FechaNacimiento = w.FechaNacimiento,
                     Celular = w.Celular,
                     MontoHora = w.MontoHora,
+                    MontoHoraS = w.MontoHoraS,
                     Activo = w.Activo,
                     FechaCreacion = w.FechaCreacion
                 })
@@ -100,6 +108,7 @@ namespace SAdminProjectNom.Server.Controllers
                 FechaNacimiento = dto.FechaNacimiento,
                 Celular = dto.Celular,
                 MontoHora = dto.MontoHora,
+                MontoHoraS = dto.MontoHoraS,
                 Activo = true,
                 FechaCreacion = DateTime.UtcNow
             };
@@ -116,6 +125,7 @@ namespace SAdminProjectNom.Server.Controllers
                 FechaNacimiento = worker.FechaNacimiento,
                 Celular = worker.Celular,
                 MontoHora = worker.MontoHora,
+                MontoHoraS = worker.MontoHoraS,
                 Activo = worker.Activo,
                 FechaCreacion = worker.FechaCreacion
             });
@@ -135,6 +145,7 @@ namespace SAdminProjectNom.Server.Controllers
             worker.FechaNacimiento = dto.FechaNacimiento;
             worker.Celular = dto.Celular;
             worker.MontoHora = dto.MontoHora;
+            worker.MontoHoraS = dto.MontoHoraS;
 
             _db.SaveChanges();
 
@@ -147,6 +158,7 @@ namespace SAdminProjectNom.Server.Controllers
                 FechaNacimiento = worker.FechaNacimiento,
                 Celular = worker.Celular,
                 MontoHora = worker.MontoHora,
+                MontoHoraS = worker.MontoHoraS,
                 Activo = worker.Activo,
                 FechaCreacion = worker.FechaCreacion
             });

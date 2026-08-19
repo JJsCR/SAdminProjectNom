@@ -20,6 +20,7 @@ export class NewDayEventComponent implements OnInit {
   workers: any[] = [];
   projects: any[] = [];
   selectedWorkerMontoHora = 0;
+  selectedWorkerMontoHoraS = 0;
   estados = ['Pendiente', 'Pagado'];
   metodosPago = ['Transferencia', 'Efectivo'];
 
@@ -39,6 +40,7 @@ export class NewDayEventComponent implements OnInit {
       proyectoId: new FormControl<number | null>({ value: null, disabled: true }, Validators.required),
       totalHoras: new FormControl<number>(0, [Validators.required, Validators.min(0.01)]),
       totalPagar: new FormControl<number>({ value: 0, disabled: true }),
+      totalSalarial: new FormControl<number>({ value: 0, disabled: true }),
       estado: new FormControl<string>('Pendiente', Validators.required),
       metodoPago: new FormControl<string>('Transferencia'),
       numeroReferencia: new FormControl<string>(''),
@@ -73,8 +75,11 @@ export class NewDayEventComponent implements OnInit {
     const horas = this.form.get('totalHoras')!.value || 0;
     const worker = this.workers.find(w => w.trabajadorId === trabajadorId);
     this.selectedWorkerMontoHora = worker ? worker.montoHora : 0;
+    this.selectedWorkerMontoHoraS = worker ? worker.montoHoraS : 0;
     const total = horas * this.selectedWorkerMontoHora;
+    const totalS = horas * this.selectedWorkerMontoHoraS;
     this.form.get('totalPagar')!.setValue(total);
+    this.form.get('totalSalarial')!.setValue(totalS);
   }
 
   guardar(): void {

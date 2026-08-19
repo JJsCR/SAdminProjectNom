@@ -113,14 +113,14 @@
           <mat-list-item>
             <mat-icon matListItemIcon>person</mat-icon>
             <span matListItemTitle>{{worker.nombreCompleto}}</span>
-            <span matListItemMeta>Liquidación: ₡{{getTotalLiquidacionTrabajador(worker.trabajadorId) | number:'1.2-2'}}</span>
+            <span matListItemLine>Salario: ₡{{getTotalSalarioTrabajador(worker.trabajadorId) | number:'1.2-2'}} | Liquidación: ₡{{getTotalLiquidacionTrabajador(worker.trabajadorId) | number:'1.2-2'}}</span>
           </mat-list-item>
         }
         @if (project.trabajadores.length > 0) {
           <mat-divider></mat-divider>
           <mat-list-item>
-            <strong matListItemTitle>Total Liquidaciones</strong>
-            <span matListItemMeta><strong>₡{{totalLiquidaciones | number:'1.2-2'}}</strong></span>
+            <strong matListItemTitle>Totales:</strong>
+            <span matListItemLine>Salario: ₡{{totalSalarios | number:'1.2-2'}} | Liquidación: ₡{{totalLiquidaciones | number:'1.2-2'}}</span>
           </mat-list-item>
         }
         @if (project.trabajadores.length === 0) {

@@ -8,8 +8,10 @@ export interface Liquidacion {
   trabajadorNombre: string;
   trabajadorCedula: string;
   montoHora: number;
+  montoHoraS: number;
   totalHoras: number;
   totalPagar: number;
+  totalS: number;
   estado: string;
   fechaPago: string | null;
   metodoPago: string | null;

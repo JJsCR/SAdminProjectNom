@@ -46,6 +46,10 @@
           <span class="value highlight-green">₡{{data.totalPagar | number}}</span>
         </div>
         <div class="info-item">
+          <span class="label">Total Salarial</span>
+          <span class="value highlight-green">₡{{data.totalS | number}}</span>
+        </div>
+        <div class="info-item">
           <span class="label">Estado</span>
           <span class="value badge" [ngClass]="{
             'badge-success': data.estado === 'Pagado',
